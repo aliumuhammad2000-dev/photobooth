@@ -1,10 +1,11 @@
-import { Route, Routes } from 'react-router';
+import { Route, Routes, useLocation } from 'react-router';
 import Navbar from './components/layout/Navbar';
+import { routePaths } from './data/routes';
 import { foundationContent } from './data/site';
 
 function FoundationHome() {
   return (
-    <main className="flex min-h-screen items-center justify-center bg-canvas px-5 py-12 sm:px-8 lg:px-12">
+    <main className="flex flex-1 items-center justify-center bg-canvas px-5 py-12 sm:px-8 lg:px-12">
       <section className="w-full max-w-2xl text-center">
         <p className="mb-5 text-xs font-semibold uppercase tracking-[0.24em] text-brand sm:tracking-[0.3em]">
           {foundationContent.eyebrow}
@@ -32,7 +33,7 @@ interface PlaceholderPageProps {
 
 function PlaceholderPage({ title }: PlaceholderPageProps) {
   return (
-    <main className="flex min-h-screen items-center justify-center bg-canvas px-5 py-16 sm:px-8 lg:px-12">
+    <main className="flex flex-1 items-center justify-center bg-canvas px-5 py-16 sm:px-8 lg:px-12">
       <section className="w-full max-w-2xl text-center">
         <p className="text-xs font-semibold uppercase tracking-[0.24em] text-brand sm:tracking-[0.3em]">
           Photobooth
@@ -49,19 +50,35 @@ function PlaceholderPage({ title }: PlaceholderPageProps) {
 }
 
 function App() {
+  const location = useLocation();
+
   return (
-    <>
-      <Navbar />
-      <Routes>
-        <Route element={<FoundationHome />} path="/" />
-        <Route element={<PlaceholderPage title="Portfolio" />} path="/portfolio" />
-        <Route element={<PlaceholderPage title="Services" />} path="/services" />
-        <Route element={<PlaceholderPage title="About" />} path="/about" />
-        <Route element={<PlaceholderPage title="Contact" />} path="/contact" />
-        <Route element={<PlaceholderPage title="Book a Session" />} path="/booking" />
-        <Route element={<PlaceholderPage title="Page not found" />} path="*" />
-      </Routes>
-    </>
+    <div className="flex min-h-screen flex-col bg-canvas">
+      <Navbar key={location.pathname} />
+      <div className="flex flex-1 flex-col">
+        <Routes>
+          <Route element={<FoundationHome />} path={routePaths.home} />
+          <Route
+            element={<PlaceholderPage title="Portfolio" />}
+            path={routePaths.portfolio}
+          />
+          <Route
+            element={<PlaceholderPage title="Services" />}
+            path={routePaths.services}
+          />
+          <Route element={<PlaceholderPage title="About" />} path={routePaths.about} />
+          <Route
+            element={<PlaceholderPage title="Contact" />}
+            path={routePaths.contact}
+          />
+          <Route
+            element={<PlaceholderPage title="Book a Session" />}
+            path={routePaths.bookSession}
+          />
+          <Route element={<PlaceholderPage title="Page not found" />} path="*" />
+        </Routes>
+      </div>
+    </div>
   );
 }
 
