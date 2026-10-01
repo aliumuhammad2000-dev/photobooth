@@ -15,12 +15,12 @@ function Hero() {
   return (
     <section
       aria-labelledby="hero-heading"
-      className="relative flex min-h-[calc(100svh-4rem)] flex-1 overflow-hidden bg-canvas lg:min-h-[calc(100svh-4.5rem)]"
+      className="relative flex min-h-[32rem] flex-1 overflow-hidden bg-canvas sm:min-h-[36rem] lg:min-h-0"
     >
       {imageSrc ? (
         <img
           alt={imageAlt}
-          className="absolute inset-0 h-full w-full object-cover"
+          className="absolute inset-0 h-full w-full object-cover object-[72%_center] sm:object-[75%_center] lg:object-center"
           fetchPriority="high"
           src={imageSrc}
         />
