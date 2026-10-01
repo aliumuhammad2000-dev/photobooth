@@ -1,5 +1,6 @@
 import { Route, Routes, useLocation } from 'react-router';
 import Hero from './components/home/Hero';
+import Philosophy from './components/home/Philosophy';
 import Navbar from './components/layout/Navbar';
 import { routePaths } from './data/routes';
 
@@ -25,6 +26,15 @@ function PlaceholderPage({ title }: PlaceholderPageProps) {
   );
 }
 
+function HomePage() {
+  return (
+    <main className="flex flex-1 flex-col bg-canvas">
+      <Hero />
+      <Philosophy />
+    </main>
+  );
+}
+
 function App() {
   const location = useLocation();
 
@@ -33,7 +43,7 @@ function App() {
       <Navbar key={location.pathname} />
       <div className="flex min-h-0 flex-1 flex-col">
         <Routes>
-          <Route element={<Hero />} path={routePaths.home} />
+          <Route element={<HomePage />} path={routePaths.home} />
           <Route
             element={<PlaceholderPage title="Portfolio" />}
             path={routePaths.portfolio}

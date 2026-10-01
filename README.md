@@ -60,6 +60,7 @@ Implemented:
 - Responsive homepage foundation
 - Responsive Navbar with React Router navigation
 - Full-screen cinematic Hero with typed content configuration
+- Editorial Our Philosophy homepage section
 - Global reduced-motion and responsive base styles
 
 Planned:
