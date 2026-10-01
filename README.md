@@ -42,9 +42,10 @@ src/
 │   └── images/       # Photography assets used by the website
 ├── components/
 │   ├── home/         # Homepage sections
+│   ├── portfolio/    # Reusable portfolio filters, grids, and media
 │   └── layout/       # Shared layout components
 ├── data/             # Centralized content and configuration
-├── pages/            # Page-level views
+├── pages/            # Portfolio and project page views
 ├── types/            # Shared TypeScript types
 ├── App.tsx           # Application entry component
 ├── index.css         # Tailwind theme and global styles
@@ -62,12 +63,14 @@ Implemented:
 - Full-screen cinematic Hero with typed content configuration
 - Editorial Our Philosophy homepage section
 - Responsive Selected Works gallery with typed demonstration placeholder data
+- Filterable `/portfolio` page
+- Dynamic `/portfolio/:slug` project pages with not-found handling
 - Global reduced-motion and responsive base styles
 
 Planned:
 
 - Approved portfolio photography for the Selected Works cards
-- Individual project galleries
+- Full-screen project lightbox
 - Photography services and booking flow
 - Photographer dashboard and authentication
 
@@ -75,7 +78,7 @@ Booking, authentication, and dashboard functionality are not implemented yet.
 
 ### Selected Works photography
 
-The Selected Works section currently uses clearly labeled Slate & Sage demonstration placeholders because no additional approved portfolio photographs are available in the repository. Replace the optional `imageSrc`, `imageAlt`, and `imagePosition` fields in `src/data/selectedWorks.ts` when real assets are approved. Dedicated `/portfolio/:slug` project pages and lightboxes are intentionally deferred.
+The Selected Works section and portfolio pages currently use clearly labeled Slate & Sage demonstration placeholders because no additional approved portfolio photographs are available in the repository. `WorkPreview` is a discriminated union: placeholder entries use `kind: 'placeholder'`, while genuine photographs must provide `kind: 'photograph'`, `imageSrc`, and meaningful `imageAlt`. Project detail routes are implemented, but full-screen lightboxes remain a future milestone.
 
 ### Hero photography
 
