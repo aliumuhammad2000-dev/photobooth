@@ -57,16 +57,20 @@ Implemented:
 
 - React, TypeScript, Vite, and Tailwind CSS v4 foundation
 - Slate & Sage color system
-- Responsive temporary foundation screen
+- Responsive homepage foundation
 - Responsive Navbar with React Router navigation
+- Full-screen cinematic Hero with typed content configuration
 - Global reduced-motion and responsive base styles
 
 Planned:
 
-- Cinematic homepage hero
 - Editorial masonry portfolio
 - Individual project galleries
 - Photography services and booking flow
 - Photographer dashboard and authentication
 
 Booking, authentication, and dashboard functionality are not implemented yet.
+
+### Hero photography
+
+The synchronized starter asset at `src/assets/hero.png` is an unrelated graphic and is intentionally not used. Add the approved local photograph at `src/assets/images/hero-photograph.jpg`, then set `imageSrc` in `src/data/hero.ts` to its imported path. Until then, the Hero uses its Slate & Sage fallback background.

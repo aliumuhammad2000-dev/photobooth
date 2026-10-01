@@ -1,31 +1,7 @@
 import { Route, Routes, useLocation } from 'react-router';
+import Hero from './components/home/Hero';
 import Navbar from './components/layout/Navbar';
 import { routePaths } from './data/routes';
-import { foundationContent } from './data/site';
-
-function FoundationHome() {
-  return (
-    <main className="flex flex-1 items-center justify-center bg-canvas px-5 py-12 sm:px-8 lg:px-12">
-      <section className="w-full max-w-2xl text-center">
-        <p className="mb-5 text-xs font-semibold uppercase tracking-[0.24em] text-brand sm:tracking-[0.3em]">
-          {foundationContent.eyebrow}
-        </p>
-
-        <h1 className="text-5xl font-semibold tracking-tight text-cream sm:text-7xl">
-          {foundationContent.brand}
-        </h1>
-
-        <p className="mx-auto mt-6 max-w-lg text-base leading-relaxed text-soft sm:text-lg">
-          {foundationContent.description}
-        </p>
-
-        <p className="mt-10 text-xs font-medium uppercase tracking-[0.16em] text-brand sm:tracking-[0.22em]">
-          {foundationContent.label}
-        </p>
-      </section>
-    </main>
-  );
-}
 
 interface PlaceholderPageProps {
   title: string;
@@ -57,7 +33,7 @@ function App() {
       <Navbar key={location.pathname} />
       <div className="flex flex-1 flex-col">
         <Routes>
-          <Route element={<FoundationHome />} path={routePaths.home} />
+          <Route element={<Hero />} path={routePaths.home} />
           <Route
             element={<PlaceholderPage title="Portfolio" />}
             path={routePaths.portfolio}
