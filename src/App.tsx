@@ -1,4 +1,10 @@
-import { Route, Routes, useLocation } from 'react-router';
+import { useLayoutEffect, useRef } from 'react';
+import {
+  Route,
+  Routes,
+  useLocation,
+  useNavigationType,
+} from 'react-router';
 import Hero from './components/home/Hero';
 import Philosophy from './components/home/Philosophy';
 import SelectedWorks from './components/home/SelectedWorks';
@@ -39,12 +45,55 @@ function HomePage() {
   );
 }
 
+function ScrollManager() {
+  const location = useLocation();
+  const navigationType = useNavigationType();
+  const scrollPositions = useRef<Record<string, number>>({});
+  const currentEntryKey = useRef(location.key);
+
+  useLayoutEffect(() => {
+    const previousRestoration = window.history.scrollRestoration;
+    window.history.scrollRestoration = 'manual';
+
+    return () => {
+      window.history.scrollRestoration = previousRestoration;
+    };
+  }, []);
+
+  useLayoutEffect(() => {
+    const handleScroll = () => {
+      scrollPositions.current[currentEntryKey.current] = window.scrollY;
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  useLayoutEffect(() => {
+    const nextScrollPosition =
+      navigationType === 'POP'
+        ? scrollPositions.current[location.key] ?? 0
+        : 0;
+
+    window.scrollTo({
+      behavior: 'instant',
+      left: 0,
+      top: nextScrollPosition,
+    });
+    currentEntryKey.current = location.key;
+  }, [location.key, navigationType]);
+
+  return null;
+}
+
 function App() {
   const location = useLocation();
 
   return (
     <div className="flex min-h-screen flex-col bg-canvas">
       <Navbar key={location.pathname} />
+      <ScrollManager />
       <div className="flex min-h-0 flex-1 flex-col">
         <Routes>
           <Route element={<HomePage />} path={routePaths.home} />

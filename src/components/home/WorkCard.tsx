@@ -28,7 +28,7 @@ function WorkCard({ work }: WorkCardProps) {
     >
       <Link
         aria-label={`${work.title}, ${work.category}`}
-        className="group block h-full rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand"
+        className="group block h-full rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand"
         to={getPortfolioProjectPath(work.slug)}
       >
         <div className={`relative h-full w-full ${aspectClasses[work.layout]}`}>
