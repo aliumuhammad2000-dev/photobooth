@@ -11,6 +11,7 @@ import SelectedWorks from './components/home/SelectedWorks';
 import Navbar from './components/layout/Navbar';
 import PortfolioPage from './pages/PortfolioPage';
 import PortfolioProjectPage from './pages/PortfolioProjectPage';
+import ServicesPage from './pages/ServicesPage';
 import { routePaths } from './data/routes';
 
 interface PlaceholderPageProps {
@@ -102,10 +103,7 @@ function App() {
             element={<PortfolioProjectPage />}
             path={routePaths.portfolioProject}
           />
-          <Route
-            element={<PlaceholderPage title="Services" />}
-            path={routePaths.services}
-          />
+          <Route element={<ServicesPage />} path={routePaths.services} />
           <Route element={<PlaceholderPage title="About" />} path={routePaths.about} />
           <Route
             element={<PlaceholderPage title="Contact" />}
