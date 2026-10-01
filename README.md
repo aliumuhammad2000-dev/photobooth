@@ -43,9 +43,10 @@ src/
 ├── components/
 │   ├── home/         # Homepage sections
 │   ├── portfolio/    # Reusable portfolio filters, grids, and media
+│   ├── services/     # Photography service cards and grids
 │   └── layout/       # Shared layout components
 ├── data/             # Centralized content and configuration
-├── pages/            # Portfolio and project page views
+├── pages/            # Portfolio, project, and services page views
 ├── types/            # Shared TypeScript types
 ├── App.tsx           # Application entry component
 ├── index.css         # Tailwind theme and global styles
@@ -65,16 +66,22 @@ Implemented:
 - Responsive Selected Works gallery with typed demonstration placeholder data
 - Filterable `/portfolio` page
 - Dynamic `/portfolio/:slug` project pages with not-found handling
+- `/services` page with six typed photography offerings
 - Global reduced-motion and responsive base styles
 
 Planned:
 
 - Approved portfolio photography for the Selected Works cards
 - Full-screen project lightbox
-- Photography services and booking flow
+- Confirmed service photography and package details
+- Booking form and enquiry flow
 - Photographer dashboard and authentication
 
 Booking, authentication, and dashboard functionality are not implemented yet.
+
+### Photography services
+
+The `/services` page presents Wedding, Portrait, Event, Fashion, Commercial, and Lifestyle Photography. Service content is configured in `src/data/services.ts` and uses a discriminated media type: demonstration visuals are labeled clearly, while future genuine photographs must provide `imageSrc` and meaningful `imageAlt`. Package prices, inclusions, and availability are not confirmed, so the page only displays the enquiry note: “Packages and custom quotations are available upon enquiry.” Service links currently lead to the existing booking placeholder. Future service-detail pages and a functional booking flow are not implemented.
 
 ### Selected Works photography
 
