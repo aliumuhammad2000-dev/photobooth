@@ -73,4 +73,4 @@ Booking, authentication, and dashboard functionality are not implemented yet.
 
 ### Hero photography
 
-The synchronized starter asset at `src/assets/hero.png` is an unrelated graphic and is intentionally not used. Add the approved local photograph at `src/assets/images/hero-photograph.jpg`, then set `imageSrc` in `src/data/hero.ts` to its imported path. Until then, the Hero uses its Slate & Sage fallback background.
+The approved Hero photograph is stored at `src/assets/images/hero-photograph.png` and imported by `src/data/hero.ts`. The unrelated starter graphic at `src/assets/hero.png` is not used. When `imageSrc` is unset, the Hero falls back to the Slate & Sage gradient. The hero photograph is an AI-generated demonstration image, not a photograph of an actual client session.
