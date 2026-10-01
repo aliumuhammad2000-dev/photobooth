@@ -1,6 +1,7 @@
 import { Route, Routes, useLocation } from 'react-router';
 import Hero from './components/home/Hero';
 import Philosophy from './components/home/Philosophy';
+import SelectedWorks from './components/home/SelectedWorks';
 import Navbar from './components/layout/Navbar';
 import { routePaths } from './data/routes';
 
@@ -31,6 +32,7 @@ function HomePage() {
     <main className="flex flex-1 flex-col bg-canvas">
       <Hero />
       <Philosophy />
+      <SelectedWorks />
     </main>
   );
 }

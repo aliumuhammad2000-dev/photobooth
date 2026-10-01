@@ -61,16 +61,21 @@ Implemented:
 - Responsive Navbar with React Router navigation
 - Full-screen cinematic Hero with typed content configuration
 - Editorial Our Philosophy homepage section
+- Responsive Selected Works gallery with typed demonstration placeholder data
 - Global reduced-motion and responsive base styles
 
 Planned:
 
-- Editorial masonry portfolio
+- Approved portfolio photography for the Selected Works cards
 - Individual project galleries
 - Photography services and booking flow
 - Photographer dashboard and authentication
 
 Booking, authentication, and dashboard functionality are not implemented yet.
+
+### Selected Works photography
+
+The Selected Works section currently uses clearly labeled Slate & Sage demonstration placeholders because no additional approved portfolio photographs are available in the repository. Replace the optional `imageSrc`, `imageAlt`, and `imagePosition` fields in `src/data/selectedWorks.ts` when real assets are approved. Dedicated `/portfolio/:slug` project pages and lightboxes are intentionally deferred.
 
 ### Hero photography
 
