@@ -15,7 +15,7 @@ function Hero() {
   return (
     <section
       aria-labelledby="hero-heading"
-      className="relative flex min-h-[32rem] flex-1 overflow-hidden bg-canvas sm:min-h-[36rem] lg:min-h-0"
+      className="hero-height relative flex flex-1 overflow-hidden bg-canvas"
     >
       {imageSrc ? (
         <img
