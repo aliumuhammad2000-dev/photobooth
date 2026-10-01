@@ -58,11 +58,11 @@ Implemented:
 - React, TypeScript, Vite, and Tailwind CSS v4 foundation
 - Slate & Sage color system
 - Responsive temporary foundation screen
+- Responsive Navbar with React Router navigation
 - Global reduced-motion and responsive base styles
 
 Planned:
 
-- Responsive navigation
 - Cinematic homepage hero
 - Editorial masonry portfolio
 - Individual project galleries
