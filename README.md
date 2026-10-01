@@ -1,75 +1,72 @@
-# React + TypeScript + Vite
+# Photobooth
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Photobooth is a cinematic photography website for one photographer. The experience will combine editorial portfolio layouts, project galleries, photography services, and a thoughtful booking journey.
 
-Currently, two official plugins are available:
+## Technology stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- React 19
+- TypeScript
+- Vite
+- Tailwind CSS v4
 
-## React Compiler
+## Getting started
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Use Node.js and npm, then install the project dependencies:
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+```bash
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
+Start the local development server:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+```bash
+npm run dev
 ```
+
+Open the local URL printed by Vite in your browser.
+
+## Development commands
+
+```bash
+npm run dev       # Start the Vite development server
+npm run build     # Type-check and create a production build
+npm run lint      # Run ESLint
+npm run preview   # Preview the production build locally
+```
+
+## Project structure
+
+```text
+src/
+├── assets/
+│   └── images/       # Photography assets used by the website
+├── components/
+│   ├── home/         # Homepage sections
+│   └── layout/       # Shared layout components
+├── data/             # Centralized content and configuration
+├── pages/            # Page-level views
+├── types/            # Shared TypeScript types
+├── App.tsx           # Application entry component
+├── index.css         # Tailwind theme and global styles
+└── main.tsx          # React and browser entry point
+```
+
+## Development status
+
+Implemented:
+
+- React, TypeScript, Vite, and Tailwind CSS v4 foundation
+- Slate & Sage color system
+- Responsive temporary foundation screen
+- Global reduced-motion and responsive base styles
+
+Planned:
+
+- Responsive navigation
+- Cinematic homepage hero
+- Editorial masonry portfolio
+- Individual project galleries
+- Photography services and booking flow
+- Photographer dashboard and authentication
+
+Booking, authentication, and dashboard functionality are not implemented yet.
