@@ -3,6 +3,8 @@ import Hero from './components/home/Hero';
 import Philosophy from './components/home/Philosophy';
 import SelectedWorks from './components/home/SelectedWorks';
 import Navbar from './components/layout/Navbar';
+import PortfolioPage from './pages/PortfolioPage';
+import PortfolioProjectPage from './pages/PortfolioProjectPage';
 import { routePaths } from './data/routes';
 
 interface PlaceholderPageProps {
@@ -46,9 +48,10 @@ function App() {
       <div className="flex min-h-0 flex-1 flex-col">
         <Routes>
           <Route element={<HomePage />} path={routePaths.home} />
+          <Route element={<PortfolioPage />} path={routePaths.portfolio} />
           <Route
-            element={<PlaceholderPage title="Portfolio" />}
-            path={routePaths.portfolio}
+            element={<PortfolioProjectPage />}
+            path={routePaths.portfolioProject}
           />
           <Route
             element={<PlaceholderPage title="Services" />}

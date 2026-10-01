@@ -32,3 +32,9 @@ export interface SelectedWorksContent {
   ctaLabel: string;
   ctaTo: string;
 }
+
+export interface PortfolioPageContent {
+  eyebrow: string;
+  heading: string;
+  description: string;
+}
