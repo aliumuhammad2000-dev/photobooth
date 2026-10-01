@@ -39,7 +39,7 @@ function SelectedWorks() {
           </Link>
         </div>
 
-        <div className="mt-16 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:mt-24 lg:grid-cols-12 lg:auto-rows-[13rem]">
+        <div className="mt-16 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:mt-24 lg:grid-cols-12 lg:items-start">
           {selectedWorks.map((work) => (
             <WorkCard key={work.id} work={work} />
           ))}

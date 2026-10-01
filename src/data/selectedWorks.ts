@@ -14,6 +14,7 @@ export const selectedWorksContent: SelectedWorksContent = {
 
 export const selectedWorks: WorkPreview[] = [
   {
+    kind: 'placeholder',
     id: 'quiet-light-study',
     slug: 'quiet-light-study',
     title: 'Quiet Light Study',
@@ -22,6 +23,7 @@ export const selectedWorks: WorkPreview[] = [
     placeholderTone: 'sage',
   },
   {
+    kind: 'placeholder',
     id: 'soft-gathering-study',
     slug: 'soft-gathering-study',
     title: 'Soft Gathering Study',
@@ -30,6 +32,7 @@ export const selectedWorks: WorkPreview[] = [
     placeholderTone: 'linen',
   },
   {
+    kind: 'placeholder',
     id: 'after-rain-study',
     slug: 'after-rain-study',
     title: 'After Rain Study',
@@ -38,6 +41,7 @@ export const selectedWorks: WorkPreview[] = [
     placeholderTone: 'shadow',
   },
   {
+    kind: 'placeholder',
     id: 'form-and-stillness-study',
     slug: 'form-and-stillness-study',
     title: 'Form & Stillness Study',
@@ -46,6 +50,7 @@ export const selectedWorks: WorkPreview[] = [
     placeholderTone: 'moss',
   },
   {
+    kind: 'placeholder',
     id: 'open-air-study',
     slug: 'open-air-study',
     title: 'Open Air Study',

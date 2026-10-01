@@ -5,9 +5,9 @@ interface WorkCardProps {
 }
 
 const layoutClasses: Record<WorkLayout, string> = {
-  feature: 'sm:col-span-2 lg:col-span-7 lg:row-span-2',
-  portrait: 'lg:col-span-5 lg:row-span-2',
-  landscape: 'lg:col-span-5',
+  feature: 'sm:col-span-2 lg:col-span-7',
+  portrait: 'lg:col-span-5',
+  landscape: 'lg:col-span-6',
   compact: 'lg:col-span-3',
 };
 
@@ -20,9 +20,9 @@ const placeholderClasses: Record<PlaceholderTone, string> = {
 };
 
 const aspectClasses: Record<WorkLayout, string> = {
-  feature: 'aspect-[4/5] lg:aspect-auto lg:min-h-[42rem]',
-  portrait: 'aspect-[4/5] lg:aspect-auto lg:min-h-[42rem]',
-  landscape: 'aspect-[16/10] lg:aspect-[16/11]',
+  feature: 'aspect-[4/5]',
+  portrait: 'aspect-[4/5]',
+  landscape: 'aspect-[16/11]',
   compact: 'aspect-[4/5]',
 };
 
@@ -32,9 +32,9 @@ function WorkCard({ work }: WorkCardProps) {
       className={`group relative overflow-hidden rounded-sm bg-surface ${layoutClasses[work.layout]}`}
     >
       <div className={`relative h-full w-full ${aspectClasses[work.layout]}`}>
-        {work.imageSrc ? (
+        {work.kind === 'photograph' ? (
           <img
-            alt={work.imageAlt ?? ''}
+            alt={work.imageAlt}
             className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
             loading="lazy"
             src={work.imageSrc}
@@ -62,9 +62,11 @@ function WorkCard({ work }: WorkCardProps) {
           <h3 className="mt-2 max-w-xs text-2xl font-semibold tracking-[-0.03em] text-cream sm:text-3xl">
             {work.title}
           </h3>
-          <p className="mt-4 text-[0.65rem] font-medium uppercase tracking-[0.2em] text-soft/80">
-            Demonstration placeholder
-          </p>
+          {work.kind === 'placeholder' && (
+            <p className="mt-4 text-[0.65rem] font-medium uppercase tracking-[0.2em] text-soft/80">
+              Demonstration placeholder
+            </p>
+          )}
         </div>
       </div>
     </article>
