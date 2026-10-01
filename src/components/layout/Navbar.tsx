@@ -47,7 +47,7 @@ function Navbar() {
   const closeMenu = () => setIsMenuOpen(false);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-brand/15 bg-surface/90 backdrop-blur-md">
+    <header className="sticky top-0 z-50 min-h-[var(--navbar-height)] border-b border-brand/15 bg-surface/90 backdrop-blur-md">
       <nav
         aria-label="Primary navigation"
         className="mx-auto flex w-full max-w-7xl items-center justify-between px-5 py-4 sm:px-8 lg:px-12"
