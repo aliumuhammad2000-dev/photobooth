@@ -16,7 +16,7 @@ export const bookingPageContent: BookingPageContent = {
       number: '02',
       title: 'Discuss the details',
       description:
-        'Once a direct enquiry channel is available, the photographer can discuss your requirements, availability, and quotation.',
+        'A demo enquiry can be saved locally for development practice; real availability and quotations are discussed separately.',
     },
     {
       number: '03',
@@ -28,7 +28,7 @@ export const bookingPageContent: BookingPageContent = {
   pricingNote:
     'Packages and custom quotations are discussed based on your photography requirements.',
   privacyNote:
-    "This website does not send or save your enquiry. If you select Copy Enquiry Details, the information is copied to your device's clipboard and may remain there until replaced or cleared.",
+    "This production build does not submit enquiries. If you select Copy Enquiry Details, the information is copied to your device's clipboard and may remain there until replaced or cleared.",
 };
 
 export const emptyBookingValues: BookingFormValues = {

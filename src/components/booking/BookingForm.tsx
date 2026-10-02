@@ -2,9 +2,12 @@ import { startTransition, useEffect, useRef, useState } from 'react';
 import type { FormEvent } from 'react';
 import BookingField from './BookingField';
 import BookingSummary from './BookingSummary';
+import BookingSuccess from './BookingSuccess';
 import { emptyBookingValues } from '../../data/booking';
 import { photographyServices } from '../../data/services';
+import { createEnquiry, EnquiryApiError } from '../../services/enquiryApi';
 import type { BookingErrors, BookingFieldName, BookingFormValues } from '../../types/booking';
+import type { Enquiry } from '../../types/enquiry';
 import { bookingFieldLimits, formatEnquiryDetails, getLocalDateInputValue, normalizeBookingValues, validateBooking } from '../../utils/bookingValidation';
 
 interface BookingFormProps {
@@ -12,6 +15,7 @@ interface BookingFormProps {
 }
 
 type FieldElement = HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;
+type SubmissionStatus = 'idle' | 'loading' | 'success' | 'error';
 
 const controlClasses = (error?: string) =>
   `w-full rounded-sm border bg-canvas px-4 py-3 text-base text-cream outline-none transition-colors placeholder:text-soft/60 focus:border-brand focus:ring-2 focus:ring-brand/30 ${
@@ -24,8 +28,11 @@ function BookingForm({ initialServiceSlug = '' }: BookingFormProps) {
     serviceSlug: initialServiceSlug,
   }));
   const [errors, setErrors] = useState<BookingErrors>({});
-  const [step, setStep] = useState<'form' | 'review'>('form');
+  const [step, setStep] = useState<'form' | 'review' | 'success'>('form');
   const [copyStatus, setCopyStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  const [submissionStatus, setSubmissionStatus] = useState<SubmissionStatus>('idle');
+  const [submissionError, setSubmissionError] = useState<string | null>(null);
+  const [savedEnquiry, setSavedEnquiry] = useState<Enquiry | null>(null);
   const [hasAttemptedReview, setHasAttemptedReview] = useState(false);
   const fieldRefs = useRef<Partial<Record<BookingFieldName, FieldElement | null>>>({});
   const formHeadingRef = useRef<HTMLHeadingElement>(null);
@@ -92,6 +99,8 @@ function BookingForm({ initialServiceSlug = '' }: BookingFormProps) {
     setValues(normalizedValues);
     setErrors(nextErrors);
     setCopyStatus('idle');
+    setSubmissionStatus('idle');
+    setSubmissionError(null);
 
     const firstInvalidField = Object.keys(nextErrors)[0] as BookingFieldName | undefined;
     if (firstInvalidField) {
@@ -112,22 +121,79 @@ function BookingForm({ initialServiceSlug = '' }: BookingFormProps) {
     }
 
     try {
-      await navigator.clipboard.writeText(formatEnquiryDetails(values, selectedService.name));
+      await navigator.clipboard.writeText(
+        formatEnquiryDetails(values, selectedService.name, savedEnquiry !== null),
+      );
       setCopyStatus('success');
     } catch {
       setCopyStatus('error');
     }
   };
 
+  const submitDemoEnquiry = async () => {
+    if (submissionStatus === 'loading') {
+      return;
+    }
+
+    setSubmissionStatus('loading');
+    setSubmissionError(null);
+
+    try {
+      const saved = await createEnquiry(values);
+      setSavedEnquiry(saved);
+      setSubmissionStatus('success');
+      setCopyStatus('idle');
+      setStep('success');
+    } catch (error) {
+      setSubmissionStatus('error');
+      setSubmissionError(
+        error instanceof EnquiryApiError && error.kind === 'http'
+          ? 'The local demo API could not save this enquiry. Check the server response and try again.'
+          : error instanceof EnquiryApiError && error.kind === 'invalid-response'
+            ? 'The local demo API returned an unexpected result. Your enquiry was not confirmed as saved.'
+            : 'Unable to reach the local demo API. Check that JSON Server is running and try again.',
+      );
+    }
+  };
+
+  const startNewDemoEnquiry = () => {
+    setValues({ ...emptyBookingValues, serviceSlug: initialServiceSlug });
+    setErrors({});
+    setCopyStatus('idle');
+    setSubmissionStatus('idle');
+    setSubmissionError(null);
+    setSavedEnquiry(null);
+    setHasAttemptedReview(false);
+    focusFormAfterEdit.current = true;
+    setStep('form');
+  };
+
+  if (step === 'success' && savedEnquiry) {
+    return (
+      <BookingSuccess
+        copyStatus={copyStatus}
+        enquiry={savedEnquiry}
+        onCopy={copyEnquiry}
+        onStartOver={startNewDemoEnquiry}
+      />
+    );
+  }
+
   if (step === 'review' && selectedService) {
     return (
       <BookingSummary
         copyStatus={copyStatus}
+        isDevelopment={import.meta.env.DEV}
+        isSubmitting={submissionStatus === 'loading'}
         onCopy={copyEnquiry}
         onEdit={() => {
           focusFormAfterEdit.current = true;
+          setSubmissionStatus('idle');
+          setSubmissionError(null);
           setStep('form');
         }}
+        onSubmit={submitDemoEnquiry}
+        submissionError={submissionError}
         service={selectedService}
         values={values}
       />

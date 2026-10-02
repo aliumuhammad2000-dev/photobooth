@@ -77,7 +77,11 @@ export function validateBooking(values: BookingFormValues): BookingErrors {
   return errors;
 }
 
-export function formatEnquiryDetails(values: BookingFormValues, serviceName: string) {
+export function formatEnquiryDetails(
+  values: BookingFormValues,
+  serviceName: string,
+  hasSavedDemoEnquiry = false,
+) {
   const optionalLines = [
     values.phone && `Phone: ${values.phone}`,
     values.preferredTime && `Preferred time: ${values.preferredTime}`,
@@ -96,6 +100,8 @@ export function formatEnquiryDetails(values: BookingFormValues, serviceName: str
     'Additional details:',
     values.details,
     '',
-    'This enquiry has not been sent or confirmed.',
+    hasSavedDemoEnquiry
+      ? 'This fictional demo enquiry was saved locally and has not been sent or confirmed.'
+      : 'This enquiry has not been sent or confirmed.',
   ].join('\n');
 }
