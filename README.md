@@ -41,12 +41,13 @@ src/
 ├── assets/
 │   └── images/       # Photography assets used by the website
 ├── components/
+│   ├── about/        # About-page presentation components
 │   ├── home/         # Homepage sections
 │   ├── portfolio/    # Reusable portfolio filters, grids, and media
 │   ├── services/     # Photography service cards and grids
 │   └── layout/       # Shared layout components
 ├── data/             # Centralized content and configuration
-├── pages/            # Portfolio, project, and services page views
+├── pages/            # Portfolio, project, services, and About page views
 ├── types/            # Shared TypeScript types
 ├── App.tsx           # Application entry component
 ├── index.css         # Tailwind theme and global styles
@@ -67,6 +68,8 @@ Implemented:
 - Filterable `/portfolio` page
 - Dynamic `/portfolio/:slug` project pages with not-found handling
 - `/services` page with six typed photography offerings
+- Reusable Behind the Lens homepage section and dedicated `/about` page
+- Shared typed About content and route configuration for homepage/About CTAs
 - Global reduced-motion and responsive base styles
 
 Planned:
@@ -78,6 +81,10 @@ Planned:
 - Photographer dashboard and authentication
 
 Booking, authentication, and dashboard functionality are not implemented yet.
+
+### Behind the Lens and About
+
+The homepage Behind the Lens section and `/about` page share the typed content source in `src/data/about.ts`. No photographer portrait, name, or verified biography was supplied, so the current portrait is an explicitly labeled Slate & Sage placeholder and the page documents what still needs to be provided. The About page's Book a Session CTA leads to the existing placeholder route; no booking form or API is implemented.
 
 ### Photography services
 

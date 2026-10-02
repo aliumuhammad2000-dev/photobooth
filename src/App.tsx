@@ -8,7 +8,9 @@ import {
 import Hero from './components/home/Hero';
 import Philosophy from './components/home/Philosophy';
 import SelectedWorks from './components/home/SelectedWorks';
+import BehindTheLens from './components/home/BehindTheLens';
 import Navbar from './components/layout/Navbar';
+import AboutPage from './pages/AboutPage';
 import PortfolioPage from './pages/PortfolioPage';
 import PortfolioProjectPage from './pages/PortfolioProjectPage';
 import ServicesPage from './pages/ServicesPage';
@@ -42,6 +44,7 @@ function HomePage() {
       <Hero />
       <Philosophy />
       <SelectedWorks />
+      <BehindTheLens />
     </main>
   );
 }
@@ -104,7 +107,7 @@ function App() {
             path={routePaths.portfolioProject}
           />
           <Route element={<ServicesPage />} path={routePaths.services} />
-          <Route element={<PlaceholderPage title="About" />} path={routePaths.about} />
+          <Route element={<AboutPage />} path={routePaths.about} />
           <Route
             element={<PlaceholderPage title="Contact" />}
             path={routePaths.contact}
