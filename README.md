@@ -92,7 +92,7 @@ Photography service cards link to `/book-session?service=<slug>` using the exist
 
 ### Behind the Lens and About
 
-The homepage Behind the Lens section and `/about` page share the typed content source in `src/data/about.ts`. The local `src/assets/images/about/me-photography.png` asset is imported there as the photographer portrait, so both views render the same image and the placeholder caption is removed. The photographer's name and verified biography details still require confirmation. The About page's Book a Session CTA leads to the existing placeholder route; no booking form or API is implemented.
+The homepage Behind the Lens section and `/about` page share the typed content source in `src/data/about.ts`. The local `src/assets/images/about/me-photography.png` asset is imported there as the photographer portrait, so both views render the same image and the placeholder caption is removed. The photographer's name and verified biography details still require confirmation. The About page's Book a Session CTA opens the frontend-only enquiry form; no server-side submission or booking API is implemented.
 
 ### Photography services
 

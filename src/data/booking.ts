@@ -28,7 +28,7 @@ export const bookingPageContent: BookingPageContent = {
   pricingNote:
     'Packages and custom quotations are discussed based on your photography requirements.',
   privacyNote:
-    'This enquiry stays in your browser while you review it. It is not sent to a server or stored on this device.',
+    "This website does not send or save your enquiry. If you select Copy Enquiry Details, the information is copied to your device's clipboard and may remain there until replaced or cleared.",
 };
 
 export const emptyBookingValues: BookingFormValues = {

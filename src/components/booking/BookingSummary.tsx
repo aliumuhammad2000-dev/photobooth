@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react';
 import type { PhotographyService } from '../../types/services';
 import type { BookingFormValues } from '../../types/booking';
 
@@ -16,6 +17,12 @@ function BookingSummary({
   service,
   values,
 }: BookingSummaryProps) {
+  const headingRef = useRef<HTMLHeadingElement>(null);
+
+  useEffect(() => {
+    headingRef.current?.focus();
+  }, []);
+
   return (
     <section aria-labelledby="review-enquiry-heading" className="rounded-sm border border-brand/25 bg-surface p-6 sm:p-8">
       <div className="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between">
@@ -23,7 +30,7 @@ function BookingSummary({
           <p className="text-xs font-semibold uppercase tracking-[0.24em] text-brand">
             REVIEW ENQUIRY
           </p>
-          <h2 className="mt-4 font-serif text-4xl leading-[1.02] tracking-[-0.035em] text-cream" id="review-enquiry-heading">
+          <h2 className="mt-4 font-serif text-4xl leading-[1.02] tracking-[-0.035em] text-cream" id="review-enquiry-heading" ref={headingRef} tabIndex={-1}>
             Check the details before you share them.
           </h2>
         </div>

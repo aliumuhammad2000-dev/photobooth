@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { startTransition, useEffect, useRef, useState } from 'react';
 import type { FormEvent } from 'react';
 import BookingField from './BookingField';
 import BookingSummary from './BookingSummary';
@@ -26,23 +26,66 @@ function BookingForm({ initialServiceSlug = '' }: BookingFormProps) {
   const [errors, setErrors] = useState<BookingErrors>({});
   const [step, setStep] = useState<'form' | 'review'>('form');
   const [copyStatus, setCopyStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  const [hasAttemptedReview, setHasAttemptedReview] = useState(false);
   const fieldRefs = useRef<Partial<Record<BookingFieldName, FieldElement | null>>>({});
+  const formHeadingRef = useRef<HTMLHeadingElement>(null);
+  const focusFormAfterEdit = useRef(false);
+
+  useEffect(() => {
+    if (!initialServiceSlug) {
+      return;
+    }
+
+    startTransition(() => {
+      setValues((current) =>
+        current.serviceSlug === initialServiceSlug
+          ? current
+          : { ...current, serviceSlug: initialServiceSlug },
+      );
+      setErrors((current) => {
+        if (!current.serviceSlug) {
+          return current;
+        }
+
+        const next = { ...current };
+        delete next.serviceSlug;
+        return next;
+      });
+    });
+  }, [initialServiceSlug]);
+
+  useEffect(() => {
+    if (step === 'form' && focusFormAfterEdit.current) {
+      focusFormAfterEdit.current = false;
+      window.requestAnimationFrame(() => formHeadingRef.current?.focus());
+    }
+  }, [step]);
 
   const setFieldValue = (field: BookingFieldName, value: string) => {
-    setValues((current) => ({ ...current, [field]: value }));
-    setErrors((current) => {
-      if (!current[field]) {
-        return current;
-      }
+    const nextValues = { ...values, [field]: value };
+    setValues(nextValues);
 
-      const next = { ...current };
-      delete next[field];
-      return next;
-    });
+    if (hasAttemptedReview || errors[field]) {
+      const fieldError = validateBooking(normalizeBookingValues(nextValues))[field];
+      setErrors((current) => {
+        if (fieldError) {
+          return { ...current, [field]: fieldError };
+        }
+
+        if (!current[field]) {
+          return current;
+        }
+
+        const next = { ...current };
+        delete next[field];
+        return next;
+      });
+    }
   };
 
   const reviewEnquiry = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setHasAttemptedReview(true);
     const normalizedValues = normalizeBookingValues(values);
     const nextErrors = validateBooking(normalizedValues);
 
@@ -81,7 +124,10 @@ function BookingForm({ initialServiceSlug = '' }: BookingFormProps) {
       <BookingSummary
         copyStatus={copyStatus}
         onCopy={copyEnquiry}
-        onEdit={() => setStep('form')}
+        onEdit={() => {
+          focusFormAfterEdit.current = true;
+          setStep('form');
+        }}
         service={selectedService}
         values={values}
       />
@@ -90,6 +136,14 @@ function BookingForm({ initialServiceSlug = '' }: BookingFormProps) {
 
   return (
     <form className="space-y-7" noValidate onSubmit={reviewEnquiry}>
+      <div>
+        <p className="text-xs font-semibold uppercase tracking-[0.24em] text-brand">
+          YOUR ENQUIRY
+        </p>
+        <h2 className="mt-4 font-serif text-4xl leading-[1.02] tracking-[-0.035em] text-cream" id="booking-form-heading" ref={formHeadingRef} tabIndex={-1}>
+          Tell us about your session.
+        </h2>
+      </div>
       <div className="grid gap-7 sm:grid-cols-2">
         <BookingField error={errors.fullName} htmlFor="full-name" label="Full name" required>
           <input
