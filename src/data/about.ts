@@ -1,4 +1,5 @@
 import { routePaths } from './routes';
+import photographerImage from '../assets/images/about/me-photography.png';
 import type { AboutContent } from '../types/about';
 
 export const aboutContent: AboutContent = {
@@ -19,12 +20,13 @@ export const aboutContent: AboutContent = {
     creativeDescription:
       'Whether documenting a celebration, creating a portrait, or bringing a visual concept to life, the approach remains thoughtful, collaborative, and attentive to detail.',
     biographyNote:
-      "The photographer's name, portrait, and verified biography details will be added when supplied.",
+      "The photographer's name and verified biography details will be added when supplied.",
   },
   portrait: {
-    kind: 'placeholder',
-    label: 'Photographer portrait coming soon',
-    tone: 'sage',
+    kind: 'photograph',
+    imageSrc: photographerImage,
+    imageAlt: 'Photographer holding a camera in a softly lit room',
+    imagePosition: 'center 45%',
   },
   creativeValues: [
     {
