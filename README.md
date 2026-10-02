@@ -50,6 +50,8 @@ src/
 │   ├── services/     # Photography service cards and grids
 │   └── layout/       # Shared layout components
 ├── data/             # Centralized content and configuration
+├── mock/             # JSON Server seed data and local database
+├── scripts/          # Local development setup scripts
 ├── pages/            # Portfolio, project, services, About, and booking views
 ├── types/            # Shared TypeScript types
 ├── App.tsx           # Application entry component
@@ -74,6 +76,7 @@ Implemented:
 - Reusable Behind the Lens homepage section and dedicated `/about` page
 - Shared typed About content and route configuration for homepage/About CTAs
 - Frontend-only `/book-session` photography enquiry form with validation, service preselection, review/edit flow, and clipboard export
+- Local JSON Server REST API foundation for fictional enquiry records
 - Global reduced-motion and responsive base styles
 
 Planned:
@@ -97,6 +100,55 @@ The homepage Behind the Lens section and `/about` page share the typed content s
 ### Photography services
 
 The `/services` page presents Wedding, Portrait, Event, Fashion, Commercial, and Lifestyle Photography. Service content is configured in `src/data/services.ts` and uses the discriminated media type to connect the matching local files from `src/assets/images/portfolio/`; no dedicated `src/assets/images/services/` folder was present. Package prices, inclusions, and availability are not confirmed, so the page only displays the enquiry note: “Packages and custom quotations are available upon enquiry.” Service links now open the frontend booking enquiry with the matching service preselected. Future service-detail pages and server-side enquiry delivery are not implemented.
+
+### Mock REST API for frontend development
+
+Photobooth uses JSON Server as a small local REST API simulator. It lets the future React dashboard and booking integration practice real HTTP requests without adding a production backend yet. The booking form is not connected to this API in the current milestone.
+
+Install dependencies, create the writable database from the committed fictional seed, and start the two development servers in separate terminals:
+
+```bash
+npm install
+npm run mock:setup
+npm run mock:api     # JSON Server at http://127.0.0.1:3001
+npm run dev          # React/Vite at the port printed by Vite, normally http://localhost:5173
+```
+
+`mock/db.seed.json` contains only fictional development records. `mock/db.json` is created by `mock:setup`, is writable by JSON Server, and is ignored by Git so local test changes stay local. The setup script never overwrites an existing database; delete `mock/db.json` manually when you intentionally want to recreate it from the seed.
+
+The API contract is:
+
+| Method | Frontend URL | Purpose |
+|---|---|---|
+| GET | `/api/enquiries` | Retrieve all enquiries |
+| GET | `/api/enquiries/:id` | Retrieve one enquiry |
+| POST | `/api/enquiries` | Create an enquiry |
+| PATCH | `/api/enquiries/:id` | Update enquiry details or status |
+| DELETE | `/api/enquiries/:id` | Delete a demonstration enquiry |
+
+The `/api` URLs are Vite development-proxy paths. Vite removes `/api` and forwards requests to JSON Server, whose underlying routes are `/enquiries` and `/enquiries/:id`. If JSON Server is not running, these proxy requests fail; the static production build does not include or deploy JSON Server.
+
+For example, PowerShell can create a fictional test enquiry with:
+
+```powershell
+$body = @{
+  id = "powershell-demo-001"
+  fullName = "PowerShell Demo Client"
+  email = "powershell-demo@example.com"
+  phone = ""
+  serviceSlug = "event-photography"
+  preferredDate = "2027-08-12"
+  preferredTime = "11:00"
+  location = "Demo Conference Hall"
+  details = "Fictional API test record."
+  status = "new"
+  createdAt = "2026-10-05T09:00:00.000Z"
+} | ConvertTo-Json
+
+Invoke-RestMethod -Uri "http://127.0.0.1:3001/enquiries" -Method Post -ContentType "application/json" -Body $body
+```
+
+The writable JSON file means test changes survive a JSON Server restart. JSON Server has no real authentication or authorization, and TypeScript types only describe what the frontend expects—they do not secure or validate arbitrary requests. Do not store real enquiries in this mock API. A future milestone will add frontend HTTP integration; a later production system would require a real protected backend.
 
 ### Selected Works photography
 

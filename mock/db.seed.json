@@ -1,0 +1,43 @@
+{
+  "enquiries": [
+    {
+      "id": "demo-enquiry-001",
+      "fullName": "Demo Client One",
+      "email": "client-one@example.com",
+      "phone": "",
+      "serviceSlug": "wedding-photography",
+      "preferredDate": "2027-06-20",
+      "preferredTime": "14:00",
+      "location": "Demo Garden Venue",
+      "details": "Fictional wedding photography enquiry for local development testing.",
+      "status": "new",
+      "createdAt": "2026-10-02T08:00:00.000Z"
+    },
+    {
+      "id": "demo-enquiry-002",
+      "fullName": "Demo Client Two",
+      "email": "client-two@example.com",
+      "phone": "+1 555 010 0200",
+      "serviceSlug": "portrait-photography",
+      "preferredDate": "2027-02-14",
+      "preferredTime": "10:30",
+      "location": "Location to be confirmed",
+      "details": "Fictional portrait session for a development dashboard demonstration.",
+      "status": "contacted",
+      "createdAt": "2026-10-03T10:15:00.000Z"
+    },
+    {
+      "id": "demo-enquiry-003",
+      "fullName": "Demo Client Three",
+      "email": "client-three@example.com",
+      "phone": "+61 2 5550 0300",
+      "serviceSlug": "commercial-photography",
+      "preferredDate": "2027-04-08",
+      "preferredTime": "09:00",
+      "location": "Demo Studio Location",
+      "details": "Fictional product photography enquiry using demonstration data only.",
+      "status": "booked",
+      "createdAt": "2026-10-04T14:45:00.000Z"
+    }
+  ]
+}
