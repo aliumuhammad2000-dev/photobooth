@@ -1,4 +1,10 @@
 import { routePaths } from './routes';
+import commercialImage from '../assets/images/portfolio/commercial-photography.png';
+import eventImage from '../assets/images/portfolio/event-photography.png';
+import fashionImage from '../assets/images/portfolio/fashion-photography.png';
+import lifestyleImage from '../assets/images/portfolio/lifestyle-photography.png';
+import portraitImage from '../assets/images/portfolio/portrait-photography.png';
+import weddingImage from '../assets/images/portfolio/wedding-photography.png';
 import type { PhotographyService, ServicesPageContent } from '../types/services';
 
 export const servicesPageContent: ServicesPageContent = {
@@ -23,7 +29,12 @@ export const photographyServices: PhotographyService[] = [
     description:
       'Thoughtfully documenting the emotion, details, and unforgettable moments that make your wedding story unique.',
     layout: 'wide',
-    media: { kind: 'placeholder', tone: 'sage' },
+    media: {
+      kind: 'photograph',
+      imageSrc: weddingImage,
+      imageAlt: 'Newly married couple embracing beneath a translucent veil',
+      imagePosition: 'center',
+    },
     ctaLabel: 'Enquire About This Service',
   },
   {
@@ -34,7 +45,12 @@ export const photographyServices: PhotographyService[] = [
     description:
       'Expressive portraits that celebrate personality, confidence, and the beauty of being yourself.',
     layout: 'standard',
-    media: { kind: 'placeholder', tone: 'linen' },
+    media: {
+      kind: 'photograph',
+      imageSrc: portraitImage,
+      imageAlt: 'Close black-and-white portrait of an older woman wearing a patterned headscarf',
+      imagePosition: 'center',
+    },
     ctaLabel: 'Enquire About This Service',
   },
   {
@@ -45,7 +61,12 @@ export const photographyServices: PhotographyService[] = [
     description:
       'Capturing the atmosphere, connections, and defining moments of gatherings worth remembering.',
     layout: 'standard',
-    media: { kind: 'placeholder', tone: 'shadow' },
+    media: {
+      kind: 'photograph',
+      imageSrc: eventImage,
+      imageAlt: 'Audience seated at an event while a panel presents on stage',
+      imagePosition: 'center',
+    },
     ctaLabel: 'Enquire About This Service',
   },
   {
@@ -56,7 +77,12 @@ export const photographyServices: PhotographyService[] = [
     description:
       'Bold, considered imagery that brings creative concepts, style, and visual identity to life.',
     layout: 'compact',
-    media: { kind: 'placeholder', tone: 'moss' },
+    media: {
+      kind: 'photograph',
+      imageSrc: fashionImage,
+      imageAlt: 'Three children posing outdoors in coordinated caps and clothing',
+      imagePosition: 'center',
+    },
     ctaLabel: 'Enquire About This Service',
   },
   {
@@ -67,7 +93,12 @@ export const photographyServices: PhotographyService[] = [
     description:
       'Purposeful photography that helps businesses communicate their products, people, and brand story.',
     layout: 'compact',
-    media: { kind: 'placeholder', tone: 'stone' },
+    media: {
+      kind: 'photograph',
+      imageSrc: commercialImage,
+      imageAlt: 'Ginger beer bottle displayed on a wooden table against a dark background',
+      imagePosition: 'center',
+    },
     ctaLabel: 'Enquire About This Service',
   },
   {
@@ -78,7 +109,12 @@ export const photographyServices: PhotographyService[] = [
     description:
       'Natural, authentic imagery celebrating everyday experiences and meaningful human connections.',
     layout: 'compact',
-    media: { kind: 'placeholder', tone: 'clay' },
+    media: {
+      kind: 'photograph',
+      imageSrc: lifestyleImage,
+      imageAlt: 'People gathered beneath string lights in a lively evening street scene',
+      imagePosition: 'center',
+    },
     ctaLabel: 'Enquire About This Service',
   },
 ];

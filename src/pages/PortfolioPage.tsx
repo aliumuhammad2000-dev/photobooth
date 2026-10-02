@@ -16,6 +16,7 @@ function PortfolioPage() {
     activeCategory === allCategory
       ? selectedWorks
       : selectedWorks.filter((work) => work.category === activeCategory);
+  const hasPlaceholders = selectedWorks.some((work) => work.kind === 'placeholder');
 
   return (
     <main className="flex-1 bg-canvas px-5 py-20 sm:px-8 sm:py-24 lg:px-12 lg:py-32">
@@ -30,9 +31,11 @@ function PortfolioPage() {
           <p className="mt-6 max-w-xl text-base leading-relaxed text-soft sm:text-lg">
             {portfolioPageContent.description}
           </p>
-          <p className="mt-5 max-w-xl text-xs leading-relaxed text-brand sm:text-sm">
-            The entries below are demonstration compositions until approved portfolio photography is connected.
-          </p>
+          {hasPlaceholders && (
+            <p className="mt-5 max-w-xl text-xs leading-relaxed text-brand sm:text-sm">
+              Some entries remain demonstration compositions until their photography is connected.
+            </p>
+          )}
         </header>
 
         <div className="mt-12 border-y border-brand/20 py-5 sm:mt-16 sm:py-6">
