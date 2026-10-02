@@ -44,12 +44,13 @@ src/
 │       └── portfolio/ # Category-matched portfolio and service photography
 ├── components/
 │   ├── about/        # About-page presentation components
+│   ├── booking/      # Enquiry form and review components
 │   ├── home/         # Homepage sections
 │   ├── portfolio/    # Reusable portfolio filters, grids, and media
 │   ├── services/     # Photography service cards and grids
 │   └── layout/       # Shared layout components
 ├── data/             # Centralized content and configuration
-├── pages/            # Portfolio, project, services, and About page views
+├── pages/            # Portfolio, project, services, About, and booking views
 ├── types/            # Shared TypeScript types
 ├── App.tsx           # Application entry component
 ├── index.css         # Tailwind theme and global styles
@@ -72,15 +73,22 @@ Implemented:
 - `/services` page with six typed photography offerings
 - Reusable Behind the Lens homepage section and dedicated `/about` page
 - Shared typed About content and route configuration for homepage/About CTAs
+- Frontend-only `/book-session` photography enquiry form with validation, service preselection, review/edit flow, and clipboard export
 - Global reduced-motion and responsive base styles
 
 Planned:
 
 - Full-screen project lightbox
-- Booking form and enquiry flow
+- Server-side enquiry delivery and live availability
 - Photographer dashboard and authentication
 
-Booking, authentication, and dashboard functionality are not implemented yet.
+Server-side enquiry delivery, live availability, authentication, and dashboard functionality are not implemented yet.
+
+### Booking enquiry experience
+
+The `/book-session` page collects a full name, email, optional phone number, photography service, preferred date, optional time and location, and required additional details. Required fields, email format, local-calendar date rules, and text lengths are validated in `src/utils/bookingValidation.ts`; invalid fields keep their values, expose accessible error text, and focus the first correction needed.
+
+Photography service cards link to `/book-session?service=<slug>` using the existing `photographyServices` data and a centralized route helper. Unknown slugs are ignored safely. A valid enquiry moves to a review step where visitors can edit their details or copy a readable plain-text enquiry with the Clipboard API. Copying does not send the enquiry, confirm an appointment, expose availability, or store personal information in local or session storage. There is no Web3Forms integration, backend/API, email provider, payment flow, or live calendar yet; those are future connection points.
 
 ### Behind the Lens and About
 
@@ -88,7 +96,7 @@ The homepage Behind the Lens section and `/about` page share the typed content s
 
 ### Photography services
 
-The `/services` page presents Wedding, Portrait, Event, Fashion, Commercial, and Lifestyle Photography. Service content is configured in `src/data/services.ts` and uses the discriminated media type to connect the matching local files from `src/assets/images/portfolio/`; no dedicated `src/assets/images/services/` folder was present. Package prices, inclusions, and availability are not confirmed, so the page only displays the enquiry note: “Packages and custom quotations are available upon enquiry.” Service links currently lead to the existing booking placeholder. Future service-detail pages and a functional booking flow are not implemented.
+The `/services` page presents Wedding, Portrait, Event, Fashion, Commercial, and Lifestyle Photography. Service content is configured in `src/data/services.ts` and uses the discriminated media type to connect the matching local files from `src/assets/images/portfolio/`; no dedicated `src/assets/images/services/` folder was present. Package prices, inclusions, and availability are not confirmed, so the page only displays the enquiry note: “Packages and custom quotations are available upon enquiry.” Service links now open the frontend booking enquiry with the matching service preselected. Future service-detail pages and server-side enquiry delivery are not implemented.
 
 ### Selected Works photography
 

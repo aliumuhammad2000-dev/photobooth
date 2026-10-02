@@ -11,6 +11,7 @@ import SelectedWorks from './components/home/SelectedWorks';
 import BehindTheLens from './components/home/BehindTheLens';
 import Navbar from './components/layout/Navbar';
 import AboutPage from './pages/AboutPage';
+import BookSessionPage from './pages/BookSessionPage';
 import PortfolioPage from './pages/PortfolioPage';
 import PortfolioProjectPage from './pages/PortfolioProjectPage';
 import ServicesPage from './pages/ServicesPage';
@@ -112,10 +113,7 @@ function App() {
             element={<PlaceholderPage title="Contact" />}
             path={routePaths.contact}
           />
-          <Route
-            element={<PlaceholderPage title="Book a Session" />}
-            path={routePaths.bookSession}
-          />
+          <Route element={<BookSessionPage />} path={routePaths.bookSession} />
           <Route element={<PlaceholderPage title="Page not found" />} path="*" />
         </Routes>
       </div>

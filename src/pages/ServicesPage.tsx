@@ -33,7 +33,7 @@ function ServicesPage() {
         </header>
 
         <div className="mt-16 sm:mt-24">
-          <ServicesGrid bookingPath={bookingPath} services={photographyServices} />
+          <ServicesGrid services={photographyServices} />
         </div>
 
         <section className="mt-20 border-t border-brand/20 pt-16 sm:mt-28 sm:pt-20 lg:mt-36 lg:flex lg:items-end lg:justify-between lg:gap-16">

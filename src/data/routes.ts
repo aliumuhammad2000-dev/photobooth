@@ -11,3 +11,7 @@ export const routePaths = {
 export function getPortfolioProjectPath(slug: string) {
   return `${routePaths.portfolio}/${encodeURIComponent(slug)}`;
 }
+
+export function getBookSessionPath(serviceSlug: string) {
+  return `${routePaths.bookSession}?service=${encodeURIComponent(serviceSlug)}`;
+}
