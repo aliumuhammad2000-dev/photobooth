@@ -10,6 +10,18 @@ import { getServiceName } from '../utils/enquiryFormatting';
 
 type RequestStatus = 'idle' | 'loading' | 'success' | 'error';
 
+function matchesEnquiryFilters(enquiry: Enquiry, filter: EnquiryFilter, query: string) {
+  const matchesStatus = filter === 'all' || enquiry.status === filter;
+  const normalizedQuery = query.trim().toLowerCase();
+  const matchesSearch = !normalizedQuery || [
+    enquiry.fullName,
+    enquiry.email,
+    getServiceName(enquiry.serviceSlug),
+  ].some((value) => value.toLowerCase().includes(normalizedQuery));
+
+  return matchesStatus && matchesSearch;
+}
+
 function DashboardPage() {
   const [enquiries, setEnquiries] = useState<Enquiry[]>([]);
   const [requestStatus, setRequestStatus] = useState<RequestStatus>('loading');
@@ -54,14 +66,7 @@ function DashboardPage() {
   );
 
   const filteredEnquiries = useMemo(() => {
-    const normalizedQuery = query.trim().toLowerCase();
-    return sortedEnquiries.filter((enquiry) => {
-      const matchesStatus = filter === 'all' || enquiry.status === filter;
-      const serviceName = getServiceName(enquiry.serviceSlug);
-      const matchesSearch = !normalizedQuery || [enquiry.fullName, enquiry.email, serviceName]
-        .some((value) => value.toLowerCase().includes(normalizedQuery));
-      return matchesStatus && matchesSearch;
-    });
+    return sortedEnquiries.filter((enquiry) => matchesEnquiryFilters(enquiry, filter, query));
   }, [filter, query, sortedEnquiries]);
 
   const selectedEnquiry = filteredEnquiries.find((enquiry) => enquiry.id === selectedId) ?? null;
@@ -75,12 +80,18 @@ function DashboardPage() {
 
   const handleFilterChange = (nextFilter: EnquiryFilter) => {
     setFilter(nextFilter);
-    clearSelectionState();
+    const selected = enquiries.find((enquiry) => enquiry.id === selectedId);
+    if (selected && !matchesEnquiryFilters(selected, nextFilter, query)) {
+      clearSelectionState();
+    }
   };
 
   const handleQueryChange = (nextQuery: string) => {
     setQuery(nextQuery);
-    clearSelectionState();
+    const selected = enquiries.find((enquiry) => enquiry.id === selectedId);
+    if (selected && !matchesEnquiryFilters(selected, filter, nextQuery)) {
+      clearSelectionState();
+    }
   };
 
   const handleSelect = (id: string) => {
@@ -105,7 +116,7 @@ function DashboardPage() {
     try {
       const updated = await updateEnquiryStatus(selectedEnquiry.id, status);
       setEnquiries((current) => current.map((enquiry) => enquiry.id === updated.id ? updated : enquiry));
-      if (filter !== 'all' && updated.status !== filter) {
+      if (!matchesEnquiryFilters(updated, filter, query)) {
         clearSelectionState();
       }
     } catch (error) {
@@ -175,7 +186,12 @@ function DashboardPage() {
                         <h2 className="font-serif text-3xl text-cream" id="enquiry-list-heading">Recent enquiries</h2>
                         <p className="text-sm text-soft">{filteredEnquiries.length} shown</p>
                       </div>
-                      <EnquiryList enquiries={filteredEnquiries} onSelect={handleSelect} selectedId={selectedId} />
+                      {pendingStatusId || deletingId ? (
+                        <p aria-live="polite" className="mb-4 text-sm text-brand" role="status">
+                          Saving a change — record selection is temporarily locked until the server responds.
+                        </p>
+                      ) : null}
+                      <EnquiryList enquiries={filteredEnquiries} isSelectionDisabled={Boolean(pendingStatusId || deletingId)} onSelect={handleSelect} selectedId={selectedId} />
                     </section>
                     {selectedEnquiry ? (
                       <EnquiryDetails

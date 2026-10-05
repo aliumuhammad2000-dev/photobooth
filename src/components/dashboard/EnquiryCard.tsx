@@ -4,15 +4,17 @@ import { formatCalendarDate, formatTimestamp, getServiceName, getStatusLabel } f
 interface EnquiryCardProps {
   enquiry: Enquiry;
   isSelected: boolean;
+  isSelectionDisabled: boolean;
   onSelect: () => void;
 }
 
-function EnquiryCard({ enquiry, isSelected, onSelect }: EnquiryCardProps) {
+function EnquiryCard({ enquiry, isSelected, isSelectionDisabled, onSelect }: EnquiryCardProps) {
   return (
     <article className={`rounded-sm border bg-surface p-5 transition-colors ${isSelected ? 'border-brand' : 'border-brand/20'}`}>
       <button
         aria-expanded={isSelected}
-        className="w-full text-left focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand"
+        className="w-full text-left focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand disabled:cursor-wait disabled:opacity-70"
+        disabled={isSelectionDisabled}
         onClick={onSelect}
         type="button"
       >
