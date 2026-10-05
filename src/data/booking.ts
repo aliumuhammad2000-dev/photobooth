@@ -16,7 +16,7 @@ export const bookingPageContent: BookingPageContent = {
       number: '02',
       title: 'Discuss the details',
       description:
-        'A demo enquiry can be saved locally for development practice; real availability and quotations are discussed separately.',
+        'We discuss your ideas, availability, and quotation before confirming the session.',
     },
     {
       number: '03',

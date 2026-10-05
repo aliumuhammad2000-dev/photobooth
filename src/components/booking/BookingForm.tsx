@@ -150,8 +150,8 @@ function BookingForm({ initialServiceSlug = '' }: BookingFormProps) {
         error instanceof EnquiryApiError && error.kind === 'http'
           ? 'The local demo API could not save this enquiry. Check the server response and try again.'
           : error instanceof EnquiryApiError && error.kind === 'invalid-response'
-            ? 'The local demo API returned an unexpected result. Your enquiry was not confirmed as saved.'
-            : 'Unable to reach the local demo API. Check that JSON Server is running and try again.',
+            ? 'The local demo API returned an unexpected result, so the save outcome is uncertain. Check mock/db.json or GET /api/enquiries before retrying to avoid a duplicate enquiry.'
+            : 'Unable to reach the local demo API, so the save outcome is uncertain. Check mock/db.json or GET /api/enquiries before retrying to avoid a duplicate enquiry.',
       );
     }
   };
