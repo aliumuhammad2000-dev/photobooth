@@ -75,23 +75,32 @@ Implemented:
 - `/services` page with six typed photography offerings
 - Reusable Behind the Lens homepage section and dedicated `/about` page
 - Shared typed About content and route configuration for homepage/About CTAs
-- Frontend-only `/book-session` photography enquiry form with validation, service preselection, review/edit flow, and clipboard export
-- Local JSON Server REST API foundation for fictional enquiry records
+- `/book-session` photography enquiry form with validation, service preselection, review/edit flow, clipboard export, and development-only mock submission
+- Separate typed Fetch API service with loading, success, error, and duplicate-submission protection
+- Local JSON Server REST API for fictional enquiry records
 - Global reduced-motion and responsive base styles
 
 Planned:
 
 - Full-screen project lightbox
-- Server-side enquiry delivery and live availability
+- Secure production enquiry delivery and live availability
 - Photographer dashboard and authentication
 
-Server-side enquiry delivery, live availability, authentication, and dashboard functionality are not implemented yet.
+Secure production enquiry delivery, live availability, authentication, and dashboard functionality are not implemented yet. The current submission flow is only a local development demonstration.
 
 ### Booking enquiry experience
 
 The `/book-session` page collects a full name, email, optional phone number, photography service, preferred date, optional time and location, and required additional details. Required fields, email format, local-calendar date rules, and text lengths are validated in `src/utils/bookingValidation.ts`; invalid fields keep their values, expose accessible error text, and focus the first correction needed.
 
-Photography service cards link to `/book-session?service=<slug>` using the existing `photographyServices` data and a centralized route helper. Unknown slugs are ignored safely. A valid enquiry moves to a review step where visitors can edit their details or copy a readable plain-text enquiry with the Clipboard API. Copying does not send the enquiry, confirm an appointment, expose availability, or store personal information in local or session storage. There is no Web3Forms integration, backend/API, email provider, payment flow, or live calendar yet; those are future connection points.
+Photography service cards link to `/book-session?service=<slug>` using the existing `photographyServices` data and a centralized route helper. Unknown slugs are ignored safely. A valid enquiry moves to a review step where visitors can edit their details, copy a readable plain-text enquiry with the Clipboard API, or—during local development—select **Submit Demo Enquiry**.
+
+The review submission uses `src/services/enquiryApi.ts` as a small API layer. It sends a native `fetch('/api/enquiries', { method: 'POST', ... })` request through the Vite proxy. The service adds `status: 'new'` and an ISO `createdAt` value, checks `response.ok`, parses the JSON response, and validates the returned record at runtime before the UI displays success. JSON Server v1 creates the final record ID, so the browser uses the ID returned by the server.
+
+`BookingForm` keeps one explicit submission status: `idle`, `loading`, `success`, or `error`. The submit button is disabled during loading, which prevents rapid duplicate POST requests. The client does not automatically retry a failed POST because a lost response could mean the server saved the record even though the browser did not receive the response. A visitor can retry manually after checking the result.
+
+The success view says that the fictional record was saved locally, but does not claim that an email was sent, availability was reserved, or a booking was confirmed. It offers a deliberate reset for a new demonstration. Failed requests keep all entered values and show a helpful message. Clipboard text distinguishes an unsent enquiry from one already saved as a local demo record. No form data is stored in localStorage or sessionStorage.
+
+The mock submission button and development notice are guarded by Vite's `import.meta.env.DEV`. Production builds keep the review-and-copy experience but do not display a functional mock submission control. There is no Web3Forms integration, real backend, email provider, payment flow, or live calendar yet.
 
 ### Behind the Lens and About
 
@@ -103,7 +112,7 @@ The `/services` page presents Wedding, Portrait, Event, Fashion, Commercial, and
 
 ### Mock REST API for frontend development
 
-Photobooth uses JSON Server as a small local REST API simulator. It lets the future React dashboard and booking integration practice real HTTP requests without adding a production backend yet. The booking form is not connected to this API in the current milestone.
+Photobooth uses JSON Server as a small local REST API simulator. It lets the booking flow and future React dashboard practice real HTTP requests without adding a production backend yet. The booking form submits only fictional development records.
 
 Install dependencies, create the writable database from the committed fictional seed, and start the two development servers in separate terminals:
 
@@ -148,7 +157,26 @@ $body = @{
 Invoke-RestMethod -Uri "http://127.0.0.1:3001/enquiries" -Method Post -ContentType "application/json" -Body $body
 ```
 
-The writable JSON file means test changes survive a JSON Server restart. JSON Server has no real authentication or authorization, and TypeScript types only describe what the frontend expects—they do not secure or validate arbitrary requests. Do not store real enquiries in this mock API. A future milestone will add frontend HTTP integration; a later production system would require a real protected backend.
+The writable JSON file means test changes survive a JSON Server restart. JSON Server has no real authentication or authorization, and TypeScript types only describe what the frontend expects—they do not secure or validate arbitrary requests. Do not store real enquiries in this mock API; a later production system would require a real protected backend.
+
+#### Testing the booking POST
+
+Use two terminals:
+
+```bash
+npm run mock:setup
+npm run mock:api
+```
+
+```bash
+npm run dev
+```
+
+Open `/book-session`, enter fictional values, review them, and select **Submit Demo Enquiry**. The browser sends a JSON body containing the booking fields plus `status: "new"` and `createdAt`. A successful response appears in `mock/db.json`, and the returned ID is shown in the success view. Stop JSON Server to test the error state; the form stays intact, and restarting the server allows a deliberate manual retry.
+
+To inspect the request in Chrome, open DevTools with `F12`, choose **Network**, filter to **Fetch/XHR**, then submit the demo enquiry. Select the `/api/enquiries` request to inspect its POST method, URL, JSON payload, response status, response JSON, and timing. The browser sees `/api/enquiries` because that is Vite's development path; Vite removes `/api` and forwards the request to JSON Server's `/enquiries` route. A stopped JSON Server appears as a failed network request from the browser.
+
+The mock request is intentionally not a production booking system. A real backend would own IDs, timestamps, authentication, authorization, server-side validation, privacy controls, and delivery to the photographer. The future dashboard can consume the same `/api/enquiries` resource shape during development, but production will require a secure deployed API.
 
 ### Selected Works photography
 

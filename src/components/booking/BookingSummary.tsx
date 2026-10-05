@@ -4,16 +4,24 @@ import type { BookingFormValues } from '../../types/booking';
 
 interface BookingSummaryProps {
   copyStatus: 'idle' | 'success' | 'error';
+  isDevelopment: boolean;
+  isSubmitting: boolean;
   onCopy: () => void;
   onEdit: () => void;
+  onSubmit: () => void;
+  submissionError: string | null;
   service: PhotographyService;
   values: BookingFormValues;
 }
 
 function BookingSummary({
   copyStatus,
+  isDevelopment,
+  isSubmitting,
   onCopy,
   onEdit,
+  onSubmit,
+  submissionError,
   service,
   values,
 }: BookingSummaryProps) {
@@ -24,7 +32,11 @@ function BookingSummary({
   }, []);
 
   return (
-    <section aria-labelledby="review-enquiry-heading" className="rounded-sm border border-brand/25 bg-surface p-6 sm:p-8">
+    <section
+      aria-busy={isSubmitting}
+      aria-labelledby="review-enquiry-heading"
+      className="rounded-sm border border-brand/25 bg-surface p-6 sm:p-8"
+    >
       <div className="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.24em] text-brand">
@@ -85,15 +97,29 @@ function BookingSummary({
       </dl>
 
       <p className="mt-6 text-sm leading-relaxed text-soft">
-        Your enquiry has not been sent. Copy the details to share them with the photographer. Online submission will be available when the enquiry system is connected.
+        {isDevelopment
+          ? 'Development mode: you can save this fictional test enquiry to the local mock database or copy it for manual sharing. Saving it does not confirm a booking.'
+          : 'Your enquiry has not been sent. Copy the details to share them with the photographer. Online submission is not available in this production build.'}
       </p>
-      <button
-        className="mt-6 inline-flex min-h-12 w-full items-center justify-center rounded-full bg-brand px-6 py-3 text-sm font-semibold text-canvas transition-colors hover:bg-cream focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand sm:w-auto"
-        onClick={onCopy}
-        type="button"
-      >
-        Copy Enquiry Details
-      </button>
+      <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+        <button
+          className="inline-flex min-h-12 items-center justify-center rounded-full border border-brand/60 px-6 py-3 text-sm font-semibold text-cream transition-colors hover:border-brand hover:bg-brand/15 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand"
+          onClick={onCopy}
+          type="button"
+        >
+          Copy Enquiry Details
+        </button>
+        {isDevelopment && (
+          <button
+            className="inline-flex min-h-12 items-center justify-center rounded-full bg-brand px-6 py-3 text-sm font-semibold text-canvas transition-colors hover:bg-cream focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand disabled:cursor-wait disabled:opacity-70"
+            disabled={isSubmitting}
+            onClick={onSubmit}
+            type="button"
+          >
+            {isSubmitting ? 'Saving Demo Enquiry...' : 'Submit Demo Enquiry'}
+          </button>
+        )}
+      </div>
       {copyStatus === 'success' && (
         <p aria-live="polite" className="mt-4 text-sm text-brand">
           Enquiry details copied to your clipboard.
@@ -102,6 +128,16 @@ function BookingSummary({
       {copyStatus === 'error' && (
         <p aria-live="polite" className="mt-4 text-sm text-cream">
           We could not access the clipboard. You can still use Edit Details to review or copy the text manually.
+        </p>
+      )}
+      {isSubmitting && (
+        <p aria-live="polite" className="mt-4 text-sm text-brand" role="status">
+          Saving your fictional demo enquiry to the local mock database...
+        </p>
+      )}
+      {submissionError && (
+        <p aria-live="assertive" className="mt-4 text-sm text-cream" role="alert">
+          {submissionError}
         </p>
       )}
     </section>

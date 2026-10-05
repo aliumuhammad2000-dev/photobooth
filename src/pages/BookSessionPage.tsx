@@ -50,7 +50,9 @@ function BookSessionPage() {
         <div className="rounded-sm border border-brand/20 bg-surface/45 p-5 sm:p-8 lg:p-10">
           <BookingForm initialServiceSlug={initialServiceSlug} />
           <p className="mt-8 border-t border-brand/15 pt-5 text-xs leading-relaxed text-soft">
-            {bookingPageContent.privacyNote}
+            {import.meta.env.DEV
+              ? "Development mode: this form can submit fictional test enquiries to the local mock API. Before submission, details stay in React state; after a successful demo submission, the record is stored in local mock/db.json. Do not enter real personal information."
+              : bookingPageContent.privacyNote}
           </p>
         </div>
       </div>
