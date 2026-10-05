@@ -1,5 +1,5 @@
 import type { BookingFormValues } from '../types/booking';
-import type { Enquiry, EnquiryStatus } from '../types/enquiry';
+import { enquiryStatuses, type Enquiry, type EnquiryStatus } from '../types/enquiry';
 
 type EnquiryPayload = BookingFormValues & {
   status: 'new';
@@ -19,14 +19,6 @@ export class EnquiryApiError extends Error {
     this.status = status;
   }
 }
-
-const enquiryStatuses: EnquiryStatus[] = [
-  'new',
-  'contacted',
-  'booked',
-  'completed',
-  'cancelled',
-];
 
 function isEnquiry(value: unknown): value is Enquiry {
   if (!value || typeof value !== 'object') {
@@ -53,30 +45,17 @@ function isEnquiry(value: unknown): value is Enquiry {
   );
 }
 
-export async function createEnquiry(
-  bookingDetails: BookingFormValues,
-): Promise<Enquiry> {
-  const payload: EnquiryPayload = {
-    ...bookingDetails,
-    status: 'new',
-    createdAt: new Date().toISOString(),
-  };
-
+async function requestJson<T>(
+  input: RequestInfo | URL,
+  init: RequestInit | undefined,
+  validate: (value: unknown) => value is T,
+): Promise<T> {
   let response: Response;
 
   try {
-    response = await fetch('/api/enquiries', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(payload),
-    });
+    response = await fetch(input, init);
   } catch {
-    throw new EnquiryApiError(
-      'network',
-      'Unable to reach the local demo API.',
-    );
+    throw new EnquiryApiError('network', 'Unable to reach the local demo API.');
   }
 
   if (!response.ok) {
@@ -98,12 +77,71 @@ export async function createEnquiry(
     );
   }
 
-  if (!isEnquiry(responseBody)) {
+  if (!validate(responseBody)) {
     throw new EnquiryApiError(
       'invalid-response',
-      'The local demo API returned an unexpected saved-enquiry response.',
+      'The local demo API returned an unexpected response.',
     );
   }
 
   return responseBody;
+}
+
+function isEnquiryList(value: unknown): value is Enquiry[] {
+  return Array.isArray(value) && value.every(isEnquiry);
+}
+
+export async function createEnquiry(
+  bookingDetails: BookingFormValues,
+): Promise<Enquiry> {
+  const payload: EnquiryPayload = {
+    ...bookingDetails,
+    status: 'new',
+    createdAt: new Date().toISOString(),
+  };
+
+  return requestJson('/api/enquiries', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  }, isEnquiry);
+}
+
+export function getEnquiries(): Promise<Enquiry[]> {
+  return requestJson('/api/enquiries', undefined, isEnquiryList);
+}
+
+export function getEnquiry(id: string): Promise<Enquiry> {
+  return requestJson(`/api/enquiries/${encodeURIComponent(id)}`, undefined, isEnquiry);
+}
+
+export function updateEnquiryStatus(
+  id: string,
+  status: EnquiryStatus,
+): Promise<Enquiry> {
+  return requestJson(`/api/enquiries/${encodeURIComponent(id)}`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ status }),
+  }, isEnquiry);
+}
+
+export async function deleteEnquiry(id: string): Promise<void> {
+  let response: Response;
+
+  try {
+    response = await fetch(`/api/enquiries/${encodeURIComponent(id)}`, {
+      method: 'DELETE',
+    });
+  } catch {
+    throw new EnquiryApiError('network', 'Unable to reach the local demo API.');
+  }
+
+  if (!response.ok) {
+    throw new EnquiryApiError(
+      'http',
+      `The local demo API returned an HTTP ${response.status} response.`,
+      response.status,
+    );
+  }
 }

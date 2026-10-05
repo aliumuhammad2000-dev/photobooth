@@ -12,6 +12,7 @@ import BehindTheLens from './components/home/BehindTheLens';
 import Navbar from './components/layout/Navbar';
 import AboutPage from './pages/AboutPage';
 import BookSessionPage from './pages/BookSessionPage';
+import DashboardPage from './pages/DashboardPage';
 import PortfolioPage from './pages/PortfolioPage';
 import PortfolioProjectPage from './pages/PortfolioProjectPage';
 import ServicesPage from './pages/ServicesPage';
@@ -114,6 +115,7 @@ function App() {
             path={routePaths.contact}
           />
           <Route element={<BookSessionPage />} path={routePaths.bookSession} />
+          {import.meta.env.DEV && <Route element={<DashboardPage />} path={routePaths.dashboard} />}
           <Route element={<PlaceholderPage title="Page not found" />} path="*" />
         </Routes>
       </div>
