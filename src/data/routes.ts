@@ -6,6 +6,7 @@ export const routePaths = {
   about: '/about',
   contact: '/contact',
   bookSession: '/book-session',
+  dashboard: '/dashboard',
 } as const;
 
 export function getPortfolioProjectPath(slug: string) {

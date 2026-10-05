@@ -7,6 +7,14 @@ export type EnquiryStatus =
   | 'completed'
   | 'cancelled';
 
+export const enquiryStatuses = [
+  'new',
+  'contacted',
+  'booked',
+  'completed',
+  'cancelled',
+] as const satisfies readonly EnquiryStatus[];
+
 export type Enquiry = BookingFormValues & {
   id: string;
   status: EnquiryStatus;

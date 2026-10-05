@@ -78,13 +78,14 @@ Implemented:
 - `/book-session` photography enquiry form with validation, service preselection, review/edit flow, clipboard export, and development-only mock submission
 - Separate typed Fetch API service with loading, success, error, and duplicate-submission protection
 - Local JSON Server REST API for fictional enquiry records
+- Development-only `/dashboard` for reading, searching, filtering, updating, and deleting fictional enquiries
 - Global reduced-motion and responsive base styles
 
 Planned:
 
 - Full-screen project lightbox
 - Secure production enquiry delivery and live availability
-- Photographer dashboard and authentication
+- Real photographer dashboard and authentication
 
 Secure production enquiry delivery, live availability, authentication, and dashboard functionality are not implemented yet. The current submission flow is only a local development demonstration.
 
@@ -177,6 +178,34 @@ Open `/book-session`, enter fictional values, review them, and select **Submit D
 To inspect the request in Chrome, open DevTools with `F12`, choose **Network**, filter to **Fetch/XHR**, then submit the demo enquiry. Select the `/api/enquiries` request to inspect its POST method, URL, JSON payload, response status, response JSON, and timing. The browser sees `/api/enquiries` because that is Vite's development path; Vite removes `/api` and forwards the request to JSON Server's `/enquiries` route. A stopped JSON Server appears as a failed network request from the browser.
 
 The mock request is intentionally not a production booking system. A real backend would own IDs, timestamps, authentication, authorization, server-side validation, privacy controls, and delivery to the photographer. The future dashboard can consume the same `/api/enquiries` resource shape during development, but production will require a secure deployed API.
+
+### Development enquiry dashboard
+
+The `/dashboard` route is a frontend-development demonstration for learning REST API integration. It is rendered only when Vite's `import.meta.env.DEV` is true, so production builds fall through to the normal not-found page. It is intentionally absent from the public Navbar. The visible notice, “Development dashboard — fictional local enquiry data only,” is a reminder that JSON Server has no authentication, authorization, or production security. No fake login or authentication layer is included.
+
+Start the mock API and frontend in separate terminals:
+
+```bash
+npm run mock:setup
+npm run mock:api
+npm run dev
+```
+
+Then open `/dashboard`. The page fetches all records once with `GET /api/enquiries`, validates every returned record at runtime, and derives Total, New, Contacted, and Booked counts from the loaded collection. It sorts newest records first by `createdAt` without mutating React state. Status filters and case-insensitive search by name, email, or resolved service name run entirely in the browser, so changing them does not make extra API requests. The dashboard resolves `serviceSlug` through `src/data/services.ts`; an unknown slug safely displays as “Unknown service.”
+
+Selecting a record reveals its complete details, including optional phone, time, location, preserved detail whitespace, status, readable dates, timestamp, and demo record ID. Calendar dates are formatted without timezone conversion; exact `createdAt` timestamps are formatted using the browser's locale and timezone. Status changes use `PATCH /api/enquiries/:id` with only `{ "status": "contacted" }`-style payload data. The UI waits for the confirmed server response before updating local state, keeps the original status when the request fails, and shows a retryable error. Deletion uses an accessible inline confirmation, then `DELETE /api/enquiries/:id`; successful deletion removes the record from state without reloading. The API service handles successful empty DELETE responses without calling `response.json()`, because `204 No Content` has no JSON body to parse.
+
+The dashboard has intentional loading, error, empty, and no-filter-match states. If the API is stopped, it shows a helpful message and a Retry button. If the API returns `[]`, it explains that fictional records submitted through `/book-session` will appear after a new submission. The layout is mobile-first: cards remain readable on narrow screens, while larger screens use a master/detail layout. Buttons, labels, focus styles, live regions, status feedback, and keyboard-operable delete confirmation support accessible use.
+
+#### Inspecting dashboard requests in Chrome
+
+Open DevTools with `F12`, select **Network**, filter to **Fetch/XHR**, and use the dashboard. Select a request to inspect its Request URL, Request Method, Status Code, Payload, Response, and Timing:
+
+- `GET /api/enquiries` loads the dashboard collection.
+- `PATCH /api/enquiries/:id` changes one status. In **Payload**, look for `{ "status": "contacted" }`.
+- `DELETE /api/enquiries/:id` removes one fictional demo record and normally returns an empty successful response.
+
+The browser uses `/api` because that is Vite's development proxy path. Vite removes `/api` and forwards the request to JSON Server's `/enquiries` or `/enquiries/:id` route. This is CRUD in the actual Photobooth flow: the booking form **creates** with POST, the dashboard **reads** with GET, status management **updates** with PATCH, and the demo delete action **deletes** with DELETE. JSON Server must remain local and must never be deployed as the production backend; a real dashboard will need a protected backend and authentication later.
 
 ### Selected Works photography
 
