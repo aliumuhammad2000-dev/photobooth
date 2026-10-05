@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import DashboardHeader from '../components/dashboard/DashboardHeader';
 import EnquiryDetails from '../components/dashboard/EnquiryDetails';
 import EnquiryFilters, { type EnquiryFilter } from '../components/dashboard/EnquiryFilters';
@@ -6,6 +6,7 @@ import EnquiryList from '../components/dashboard/EnquiryList';
 import EnquiryStats from '../components/dashboard/EnquiryStats';
 import { deleteEnquiry, EnquiryApiError, getEnquiries, updateEnquiryStatus } from '../services/enquiryApi';
 import { enquiryStatuses, type Enquiry, type EnquiryStatus } from '../types/enquiry';
+import { getServiceName } from '../utils/enquiryFormatting';
 
 type RequestStatus = 'idle' | 'loading' | 'success' | 'error';
 
@@ -22,6 +23,7 @@ function DashboardPage() {
   const [deleteError, setDeleteError] = useState<string | null>(null);
   const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const dashboardHeadingRef = useRef<HTMLHeadingElement>(null);
 
   useEffect(() => {
     let isActive = true;
@@ -55,14 +57,38 @@ function DashboardPage() {
     const normalizedQuery = query.trim().toLowerCase();
     return sortedEnquiries.filter((enquiry) => {
       const matchesStatus = filter === 'all' || enquiry.status === filter;
-      const serviceName = enquiry.serviceSlug.replaceAll('-', ' ');
+      const serviceName = getServiceName(enquiry.serviceSlug);
       const matchesSearch = !normalizedQuery || [enquiry.fullName, enquiry.email, serviceName]
         .some((value) => value.toLowerCase().includes(normalizedQuery));
       return matchesStatus && matchesSearch;
     });
   }, [filter, query, sortedEnquiries]);
 
-  const selectedEnquiry = enquiries.find((enquiry) => enquiry.id === selectedId) ?? null;
+  const selectedEnquiry = filteredEnquiries.find((enquiry) => enquiry.id === selectedId) ?? null;
+
+  const clearSelectionState = () => {
+    setSelectedId(null);
+    setStatusError(null);
+    setDeleteError(null);
+    setDeleteConfirmId(null);
+  };
+
+  const handleFilterChange = (nextFilter: EnquiryFilter) => {
+    setFilter(nextFilter);
+    clearSelectionState();
+  };
+
+  const handleQueryChange = (nextQuery: string) => {
+    setQuery(nextQuery);
+    clearSelectionState();
+  };
+
+  const handleSelect = (id: string) => {
+    setSelectedId(id);
+    setStatusError(null);
+    setDeleteError(null);
+    setDeleteConfirmId(null);
+  };
 
   const retryDashboard = () => {
     setRequestStatus('loading');
@@ -79,6 +105,9 @@ function DashboardPage() {
     try {
       const updated = await updateEnquiryStatus(selectedEnquiry.id, status);
       setEnquiries((current) => current.map((enquiry) => enquiry.id === updated.id ? updated : enquiry));
+      if (filter !== 'all' && updated.status !== filter) {
+        clearSelectionState();
+      }
     } catch (error) {
       setStatusError(error instanceof EnquiryApiError && error.kind === 'http'
         ? 'The status could not be saved. Check the mock API response and try again.'
@@ -95,8 +124,8 @@ function DashboardPage() {
     try {
       await deleteEnquiry(selectedEnquiry.id);
       setEnquiries((current) => current.filter((enquiry) => enquiry.id !== selectedEnquiry.id));
-      setSelectedId(null);
-      setDeleteConfirmId(null);
+      clearSelectionState();
+      window.requestAnimationFrame(() => dashboardHeadingRef.current?.focus());
     } catch {
       setDeleteError('The demo enquiry could not be deleted. It remains visible; check the mock API and try again.');
     } finally {
@@ -107,7 +136,7 @@ function DashboardPage() {
   return (
     <main className="flex-1 bg-canvas px-5 py-12 sm:px-8 sm:py-16 lg:px-12 lg:py-20">
       <div className="mx-auto w-full max-w-7xl">
-        <DashboardHeader />
+        <DashboardHeader headingRef={dashboardHeadingRef} />
 
         {requestStatus === 'loading' && (
           <p aria-live="polite" className="mt-10 rounded-sm border border-brand/20 bg-surface p-6 text-brand" role="status">
@@ -136,7 +165,7 @@ function DashboardPage() {
               </section>
             ) : (
               <>
-                <EnquiryFilters filter={filter} onFilterChange={setFilter} onQueryChange={setQuery} query={query} />
+                <EnquiryFilters filter={filter} onFilterChange={handleFilterChange} onQueryChange={handleQueryChange} query={query} />
                 {filteredEnquiries.length === 0 ? (
                   <p className="rounded-sm border border-brand/20 bg-surface p-8 text-center text-soft">No enquiries match these filters.</p>
                 ) : (
@@ -146,7 +175,7 @@ function DashboardPage() {
                         <h2 className="font-serif text-3xl text-cream" id="enquiry-list-heading">Recent enquiries</h2>
                         <p className="text-sm text-soft">{filteredEnquiries.length} shown</p>
                       </div>
-                      <EnquiryList enquiries={filteredEnquiries} onSelect={setSelectedId} selectedId={selectedId} />
+                      <EnquiryList enquiries={filteredEnquiries} onSelect={handleSelect} selectedId={selectedId} />
                     </section>
                     {selectedEnquiry ? (
                       <EnquiryDetails

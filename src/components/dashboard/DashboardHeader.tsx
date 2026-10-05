@@ -1,10 +1,16 @@
-function DashboardHeader() {
+import type { RefObject } from 'react';
+
+interface DashboardHeaderProps {
+  headingRef?: RefObject<HTMLHeadingElement | null>;
+}
+
+function DashboardHeader({ headingRef }: DashboardHeaderProps) {
   return (
     <header className="border-b border-brand/20 pb-8">
       <p className="text-xs font-semibold uppercase tracking-[0.24em] text-brand">
         DEVELOPMENT DASHBOARD
       </p>
-      <h1 className="mt-4 max-w-3xl font-serif text-5xl leading-[0.98] tracking-[-0.04em] text-cream sm:text-6xl">
+      <h1 className="mt-4 max-w-3xl font-serif text-5xl leading-[0.98] tracking-[-0.04em] text-cream sm:text-6xl" ref={headingRef} tabIndex={-1}>
         Enquiries, kept in view.
       </h1>
       <p className="mt-6 max-w-2xl text-base leading-relaxed text-soft sm:text-lg">

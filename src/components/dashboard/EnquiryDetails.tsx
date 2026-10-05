@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import { useEffect, useRef, type ReactNode } from 'react';
 import type { Enquiry, EnquiryStatus } from '../../types/enquiry';
 import { enquiryStatuses } from '../../types/enquiry';
 import { formatCalendarDate, formatTimestamp, getServiceName, getStatusLabel } from '../../utils/enquiryFormatting';
@@ -28,6 +28,20 @@ function EnquiryDetails({
   onStatusChange,
   statusError,
 }: EnquiryDetailsProps) {
+  const deleteButtonRef = useRef<HTMLButtonElement>(null);
+  const confirmButtonRef = useRef<HTMLButtonElement>(null);
+  const wasDeletePending = useRef(false);
+
+  useEffect(() => {
+    if (isDeletePending) {
+      window.requestAnimationFrame(() => confirmButtonRef.current?.focus());
+    } else if (wasDeletePending.current && !isDeleting) {
+      window.requestAnimationFrame(() => deleteButtonRef.current?.focus());
+    }
+
+    wasDeletePending.current = isDeletePending;
+  }, [isDeletePending, isDeleting]);
+
   return (
     <aside aria-labelledby="selected-enquiry-heading" className="self-start rounded-sm border border-brand/30 bg-surface p-6 lg:sticky lg:top-28">
       <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">FULL ENQUIRY</p>
@@ -65,14 +79,14 @@ function EnquiryDetails({
 
       <div className="mt-8 border-t border-brand/15 pt-6">
         {!isDeletePending ? (
-          <button className="rounded-full border border-cream/40 px-5 py-3 text-sm font-semibold text-cream transition-colors hover:border-cream focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand disabled:opacity-60" disabled={isUpdatingStatus || isDeleting} onClick={onRequestDelete} type="button">
+          <button className="rounded-full border border-cream/40 px-5 py-3 text-sm font-semibold text-cream transition-colors hover:border-cream focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand disabled:opacity-60" disabled={isUpdatingStatus || isDeleting} onClick={onRequestDelete} ref={deleteButtonRef} type="button">
             Delete demo enquiry
           </button>
         ) : (
           <div className="rounded-sm border border-cream/30 p-4">
             <p className="text-sm leading-relaxed text-cream">Delete this fictional demo enquiry? This cannot be undone in the local mock database.</p>
             <div className="mt-4 flex flex-wrap gap-3">
-              <button className="rounded-full bg-cream px-4 py-2 text-sm font-semibold text-canvas focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand disabled:opacity-60" disabled={isDeleting} onClick={onConfirmDelete} type="button">{isDeleting ? 'Deleting…' : 'Confirm delete'}</button>
+              <button className="rounded-full bg-cream px-4 py-2 text-sm font-semibold text-canvas focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand disabled:opacity-60" disabled={isDeleting} onClick={onConfirmDelete} ref={confirmButtonRef} type="button">{isDeleting ? 'Deleting…' : 'Confirm delete'}</button>
               <button className="rounded-full border border-brand/40 px-4 py-2 text-sm font-semibold text-cream focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand disabled:opacity-60" disabled={isDeleting} onClick={onCancelDelete} type="button">Cancel</button>
             </div>
           </div>
