@@ -3,7 +3,7 @@ import PortraitVisual from '../components/about/PhotographerPortrait';
 import { aboutContent } from '../data/about';
 
 function AboutPage() {
-  const { page, creativeValues, portrait } = aboutContent;
+  const { page, photographer, creativeValues, portrait } = aboutContent;
 
   return (
     <main className="flex-1 bg-canvas px-5 py-20 sm:px-8 sm:py-24 lg:px-12 lg:py-32">
@@ -15,6 +15,13 @@ function AboutPage() {
           <h1 className="mt-6 font-serif text-5xl leading-[0.98] tracking-[-0.04em] text-cream sm:text-7xl">
             {page.heading}
           </h1>
+          <div className="mt-8 flex flex-col gap-2 text-sm text-soft sm:flex-row sm:items-center sm:gap-5">
+            <p className="text-lg font-semibold text-cream">{photographer.name}</p>
+            <span aria-hidden="true" className="hidden text-brand sm:inline">/</span>
+            <p>{photographer.professionalIdentity}</p>
+            <span aria-hidden="true" className="hidden text-brand sm:inline">/</span>
+            <p>Based in {photographer.location}</p>
+          </div>
         </header>
 
         <section className="mt-16 grid gap-12 sm:mt-24 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:items-start lg:gap-20">
@@ -23,9 +30,32 @@ function AboutPage() {
             <p className="text-xl leading-relaxed text-cream sm:text-3xl sm:leading-snug">
               {page.introduction}
             </p>
-            <p className="mt-8 border-l border-brand/50 pl-5 text-sm leading-relaxed text-brand">
-              {page.biographyNote}
+            <div className="mt-8 space-y-5 text-base leading-relaxed text-soft sm:text-lg">
+              <p className="whitespace-pre-line">{photographer.biography}</p>
+            </div>
+            <p className="mt-10 border-l border-brand/50 pl-5 text-lg leading-relaxed text-brand sm:text-xl">
+              {photographer.creativePhilosophy}
             </p>
+          </div>
+        </section>
+
+        <section aria-labelledby="specialties-heading" className="mt-24 border-t border-brand/20 pt-16 sm:mt-32 sm:pt-20 lg:mt-40">
+          <div className="grid gap-8 lg:grid-cols-[minmax(0,0.75fr)_minmax(0,1.25fr)] lg:gap-20">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-brand sm:text-sm sm:tracking-[0.34em]">
+                AREAS OF FOCUS
+              </p>
+              <h2 className="mt-5 font-serif text-4xl leading-[1.02] tracking-[-0.035em] text-cream sm:text-6xl" id="specialties-heading">
+                Stories in many forms.
+              </h2>
+            </div>
+            <ul className="grid gap-0 border-y border-brand/20 sm:grid-cols-2">
+              {photographer.specialties.map((specialty) => (
+                <li className="border-b border-brand/20 py-5 text-base text-cream last:border-b-0 sm:px-6 sm:first:pl-0" key={specialty}>
+                  {specialty}
+                </li>
+              ))}
+            </ul>
           </div>
         </section>
 

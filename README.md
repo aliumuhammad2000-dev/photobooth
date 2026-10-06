@@ -105,7 +105,7 @@ The mock submission button and development notice are guarded by Vite's `import.
 
 ### Behind the Lens and About
 
-The homepage Behind the Lens section and `/about` page share the typed content source in `src/data/about.ts`. The local `src/assets/images/about/me-photography.png` asset is imported there as the photographer portrait, so both views render the same image and the placeholder caption is removed. The photographer's name and verified biography details still require confirmation. The About page's Book a Session CTA opens the frontend-only enquiry form; no server-side submission or booking API is implemented.
+The homepage Behind the Lens section and `/about` page share the typed photographer profile in `src/data/about.ts`. The profile introduces Femi Leah as a Photographer & Visual Storyteller based in Surulere, with approved biography, creative philosophy, and specialties centralized in the typed About content. The local `src/assets/images/about/me-photography.png` asset is imported there as a descriptive, unclaimed photographer image; its alt text does not identify the person shown as Femi Leah. The About page's Book a Session CTA opens the frontend-only enquiry form; no server-side submission or booking API is implemented.
 
 ### Photography services
 
