@@ -3,24 +3,39 @@ import photographerImage from '../assets/images/about/me-photography.png';
 import type { AboutContent } from '../types/about';
 
 export const aboutContent: AboutContent = {
+  photographer: {
+    name: 'Femi Leah',
+    location: 'Surulere',
+    professionalIdentity: 'Photographer & Visual Storyteller',
+    specialties: [
+      'Portrait & Personal Branding',
+      'Weddings & Celebrations',
+      'Fashion & Editorial',
+      'Lifestyle & Documentary',
+      'Events',
+      'Commercial & Brand Storytelling',
+    ],
+    biography:
+      'Femi Leah is a photographer based in Surulere, with a creative vision rooted in emotion, individuality, and authentic storytelling.\n\nDrawn to the beauty of ordinary moments and the energy of extraordinary celebrations, Femi approaches photography with an eye for natural expressions, thoughtful lighting, and meaningful details.\n\nFrom intimate portraits and elegant weddings to fashion editorials and lifestyle photography, the goal is simple: to create images that do more than capture appearances. Images that preserve feelings, celebrate personalities, and tell stories worth remembering.',
+    creativePhilosophy:
+      "Photography is more than capturing what a moment looks like. It's preserving what it feels like.",
+  },
   homepage: {
     eyebrow: 'BEHIND THE LENS',
-    heading: 'The perspective behind every frame.',
+    heading: 'Meet Femi Leah.',
     description:
-      'Great photography begins with attention—to people, emotion, light, and the moments that often pass unnoticed. Discover the creative approach behind Photobooth.',
-    ctaLabel: 'Meet the Photographer',
+      'Based in Surulere, Femi Leah creates thoughtful photography inspired by genuine emotion, expressive personalities, and the beauty of storytelling through images.',
+    ctaLabel: 'Discover My Story',
     ctaTo: routePaths.about,
   },
   page: {
-    eyebrow: 'ABOUT PHOTOBOOTH',
-    heading: 'Photography with intention.',
+    eyebrow: 'ABOUT THE PHOTOGRAPHER',
+    heading: 'Meet the photographer.',
     introduction:
-      'Photobooth is built around a simple idea: meaningful photographs should preserve more than appearances. They should hold the atmosphere, emotion, and character of a moment.',
+      'Thoughtful photography for stories, people, and moments worth remembering.',
     creativeHeading: 'An eye for the moments that matter.',
     creativeDescription:
       'Whether documenting a celebration, creating a portrait, or bringing a visual concept to life, the approach remains thoughtful, collaborative, and attentive to detail.',
-    biographyNote:
-      "The photographer's name and verified biography details will be added when supplied.",
   },
   portrait: {
     kind: 'photograph',

@@ -21,7 +21,17 @@ export interface CreativeValue {
   description: string;
 }
 
+export interface PhotographerProfile {
+  name: string;
+  location: string;
+  professionalIdentity: string;
+  specialties: string[];
+  biography: string;
+  creativePhilosophy: string;
+}
+
 export interface AboutContent {
+  photographer: PhotographerProfile;
   homepage: {
     eyebrow: string;
     heading: string;
@@ -35,7 +45,6 @@ export interface AboutContent {
     introduction: string;
     creativeHeading: string;
     creativeDescription: string;
-    biographyNote: string;
   };
   portrait: PhotographerPortrait;
   creativeValues: CreativeValue[];
